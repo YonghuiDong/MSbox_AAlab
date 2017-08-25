@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' @title tanimoto similarity\n#' @description calculate tanimoto similarities of different compounds\n#' @author Yonghui Dong\n#' @param x similary\n#' @example\n#' x <- data.frame(Samp1=c(0,0,0,1,1,1,0,0,1), Samp2=c(1,1,1,1,1,1,0,0,1))\n#' tanimoto(x)\n\n\ntanimoto <- function(x) {\n  res<-sapply(x, function(x1){\n    sapply(x, function(x2) {i=length(which(x1 & x2)) / length(which(x1 | x2)); ifelse(is.na(i), 0, i)})\n  })\n  return(res)\n}\n\n\n",
+    "created" : 1503675433526.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2279210848",
+    "id" : "3108BDF2",
+    "lastKnownWriteTime" : 1503675564,
+    "last_content_update" : 1503675564376,
+    "path" : "~/Dropbox/Github/Chembox/Chembox/R/Tanimoto.R",
+    "project_path" : "R/Tanimoto.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

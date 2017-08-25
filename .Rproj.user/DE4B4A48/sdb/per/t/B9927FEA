@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' @title accurate ion mass\n#' @description calculate accurate ion mass\n#' @author Yonghui Dong\n#' @param m Chemical formula of an ion\n#' @param z charge, default value is 1\n#' @param mode ionization mode, either positive '+', or negative '-'\n#' @example mz('C7H7O4', z = 1, mode = '+')\n\n\n# calculate accurate ion mass\nmz <- function(m, z=1, mode = c('+', '-')) {\n  ## read element data, and find the element with the highest abundance\n  element <- read.csv('element.csv',header = T)\n  element <- as.data.frame(element)\n  element$Abund.<- as.numeric(element$Abund.)\n  element.agg <- aggregate(Abund. ~ Class, element, max)\n  element.max <- merge(element.agg, element)\n  e <- 0.000548597 # mass of an electron\n  ## split the mass formula\n  v1 <- strsplit(m, \"(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])\", perl = TRUE)[[1]]\n  atom <- v1[c(TRUE, FALSE)]\n  num <- as.numeric(v1[c(FALSE, TRUE)])\n  if (length(atom) == length(num)) {\n    options(digits=12)\n    atom_mass <- element.max$Mass[match(atom, element.max$Class)]\n    if (mode == '+') {\n      accurate_mz <- (sum(atom_mass*num)-z*e)/z\n      return(accurate_mz)\n    } else if (mode == '-') {\n      accurate_mz <- (sum(atom_mass*num)+z*e)/z\n      return(accurate_mz)\n    } else\n      message ('Ion mode is not correct')\n  }\n  else\n    message('Wrong chemical formula. If the numbers of some elements are missing?')\n}\n",
+    "created" : 1503674310521.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "535550236",
+    "id" : "B9927FEA",
+    "lastKnownWriteTime" : 1503674490,
+    "last_content_update" : 1503674490158,
+    "path" : "~/Dropbox/Github/Chembox/Chembox/R/Ion_Mass.R",
+    "project_path" : "R/Ion_Mass.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
