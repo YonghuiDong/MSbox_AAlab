@@ -4,13 +4,14 @@
 #' @param m Chemical formula of an ion
 #' @param z charge, default value is 1
 #' @param mode ionization mode, either positive '+', or negative '-'
-#' @example mz('C7H7O4', z = 1, mode = '+')
+#' @examples
+#'  mz('C7H7O4', z = 1, mode = '+')
 
 
 # calculate accurate ion mass
 mz <- function(m, z=1, mode = c('+', '-')) {
   ## read element data, and find the element with the highest abundance
-  element <- read.csv('element.csv',header = T)
+  data("element")
   element <- as.data.frame(element)
   element$Abund.<- as.numeric(element$Abund.)
   element.agg <- aggregate(Abund. ~ Class, element, max)

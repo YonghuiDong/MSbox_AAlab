@@ -3,7 +3,8 @@
 #' @author Yonghui Dong
 #' @param m measured m/z
 #' @param t theoretical m/z
-#' @example ppm(155.03383, 155.03388)
+#' @examples
+#' ppm(155.03383, 155.03388)
 
 # Calculate m/z accuracy
 ppm <- function(m, t) {

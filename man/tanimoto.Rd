@@ -12,6 +12,10 @@ tanimoto(x)
 \description{
 calculate tanimoto similarities of different compounds
 }
+\examples{
+x <- data.frame(Samp1=c(0,0,0,1,1,1,0,0,1), Samp2=c(1,1,1,1,1,1,0,0,1))
+tanimoto(x)
+}
 \author{
 Yonghui Dong
 }

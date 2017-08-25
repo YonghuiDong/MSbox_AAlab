@@ -2,12 +2,13 @@
 #' @description calculate accurate molecular mass
 #' @author Yonghui Dong
 #' @param F chemical formula, must be written in capital letters
-#' @example M_mass('C7H6O4')
+#' @examples
+#' M_mass('C7H6O4')
 
 # calculate accurate molecular mass
 M_mass <- function(F) {
   ## read element data, and find the element with the highest abundance
-  element <- read.csv('element.csv',header = T)
+  data("element")
   element <- as.data.frame(element)
   element$Abund.<- as.numeric(element$Abund.)
   element.agg <- aggregate(Abund. ~ Class, element, max)

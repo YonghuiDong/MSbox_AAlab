@@ -14,6 +14,9 @@ ppm(m, t)
 \description{
 calculate the mass accuracy of measured m/z
 }
+\examples{
+ppm(155.03383, 155.03388)
+}
 \author{
 Yonghui Dong
 }
