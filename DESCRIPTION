@@ -8,5 +8,4 @@ Description: Common mass spectrometry tools for analytical chemistry.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-imports: base
 RoxygenNote: 6.0.1
