@@ -5,13 +5,13 @@
 #' @param mode ionization mode, either positive '+' or negative '-'
 #' @export
 #' @examples \dontrun{
-#'  contam(33.033, ppm = 10, mode = '+')
+#'  contam(33.0335, ppm = 10, mode = '+')
 #'  contam(44.998, ppm = 10, mode = '-')
 #' }
 
 contam <- function (mz, ppm = 10, mode = c('+', '-')) {
-  load('R/contam_pos')
-  load('R/contam_neg')
+  load('R/contam_pos.rda')
+  load('R/contam_neg.rda')
   contam_pos <- as.data.frame(contam_pos)
   contam_neg <- as.data.frame(contam_neg)
   expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL),
