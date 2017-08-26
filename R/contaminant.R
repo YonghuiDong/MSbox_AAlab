@@ -3,13 +3,17 @@
 #' @param mz suspected m/z value
 #' @param ppm mass tolerance, default value = 10
 #' @param mode ionization mode, either positive '+' or negative '-'
-#' @examples
-#' contam(33.033, ppm = 10, mode = '+')
-#' contam(44.998, ppm = 10, mode = '-')
+#' @export
+#' @examples \dontrun{
+#'  contam(33.033, ppm = 10, mode = '+')
+#'  contam(44.998, ppm = 10, mode = '-')
+#' }
 
 contam <- function (mz, ppm = 10, mode = c('+', '-')) {
-  data('contam_pos')
-  data('contam_neg')
+  load('R/contam_pos')
+  load('R/contam_neg')
+  contam_pos <- as.data.frame(contam_pos)
+  contam_neg <- as.data.frame(contam_neg)
   expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL),
                                          list(...))
   if(mode == '-') {

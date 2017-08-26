@@ -2,15 +2,17 @@
 #' @description Check element isotope information
 #' @param S element, can be element symbol (i.e C) or full name (i.e. Carbon).
 #' Element symbol is case sensitive, which full name is case insensitive.
-#' @examples
-#' E_iso('C') # element symbol
-#' E_iso('Carbon') # element full name
-#' E_iso('carBon') # element full name
+#' @export
+#' @examples \dontrun{
+#'  E_iso('C') # element symbol
+#'  E_iso('Carbon') # element full name
+#'  E_iso('carBon') # element full name
+#' }
 
 # check isotopes
 E_iso <- function(S) {
   # read element data
-  data("element")
+  load('R/element.rda')
   element <- as.data.frame(element)
   element$Symbol <- as.character(element$Symbol)
   element$Name <- toupper(element$Name)

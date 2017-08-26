@@ -13,5 +13,7 @@ M_mass(F)
 calculate accurate molecular mass
 }
 \examples{
-M_mass('C7H6O4')
+\dontrun{
+ M_mass('C7H6O4')
+}
 }

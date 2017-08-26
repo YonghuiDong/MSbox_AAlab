@@ -17,5 +17,7 @@ mz(m, z = 1, mode = c("+", "-"))
 calculate accurate ion mass
 }
 \examples{
-mz('C7H7O4', z = 1, mode = '+')
+\dontrun{
+ mz('C7H7O4', z = 1, mode = '+')
+}
 }

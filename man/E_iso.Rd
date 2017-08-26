@@ -14,7 +14,9 @@ Element symbol is case sensitive, which full name is case insensitive.}
 Check element isotope information
 }
 \examples{
-E_iso('C') # element symbol
-E_iso('Carbon') # element full name
-E_iso('carBon') # element full name
+\dontrun{
+ E_iso('C') # element symbol
+ E_iso('Carbon') # element full name
+ E_iso('carBon') # element full name
+}
 }
