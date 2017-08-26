@@ -11,13 +11,10 @@ E_iso(S)
 Element symbol is case sensitive, which full name is case insensitive.}
 }
 \description{
-check element isotope information
+Check element isotope information
 }
 \examples{
-E_iso('C')
-E_iso('Carbon')
-E_iso('carBon')
-}
-\author{
-Yonghui Dong
+E_iso('C') # element symbol
+E_iso('Carbon') # element full name
+E_iso('carBon') # element full name
 }

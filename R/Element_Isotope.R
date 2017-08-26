@@ -1,12 +1,11 @@
 #' @title Element isotopes
-#' @description check element isotope information
-#' @author Yonghui Dong
+#' @description Check element isotope information
 #' @param S element, can be element symbol (i.e C) or full name (i.e. Carbon).
 #' Element symbol is case sensitive, which full name is case insensitive.
 #' @examples
-#' E_iso('C')
-#' E_iso('Carbon')
-#' E_iso('carBon')
+#' E_iso('C') # element symbol
+#' E_iso('Carbon') # element full name
+#' E_iso('carBon') # element full name
 
 # check isotopes
 E_iso <- function(S) {

@@ -1,6 +1,5 @@
 #' @title molecular mass
 #' @description calculate accurate molecular mass
-#' @author Yonghui Dong
 #' @param F chemical formula, must be written in capital letters
 #' @examples
 #' M_mass('C7H6O4')

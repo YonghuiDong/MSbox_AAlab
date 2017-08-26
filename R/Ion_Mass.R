@@ -1,11 +1,10 @@
 #' @title accurate ion mass
 #' @description calculate accurate ion mass
-#' @author Yonghui Dong
-#' @param m Chemical formula of an ion
+#' @param m chemical formula of an ion
 #' @param z charge, default value is 1
-#' @param mode ionization mode, either positive '+', or negative '-'
+#' @param mode ionization mode, either positive '+' or negative '-'
 #' @examples
-#'  mz('C7H7O4', z = 1, mode = '+')
+#' mz('C7H7O4', z = 1, mode = '+')
 
 
 # calculate accurate ion mass

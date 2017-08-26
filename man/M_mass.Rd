@@ -15,6 +15,3 @@ calculate accurate molecular mass
 \examples{
 M_mass('C7H6O4')
 }
-\author{
-Yonghui Dong
-}

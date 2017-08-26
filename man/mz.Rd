@@ -7,18 +7,15 @@
 mz(m, z = 1, mode = c("+", "-"))
 }
 \arguments{
-\item{m}{Chemical formula of an ion}
+\item{m}{chemical formula of an ion}
 
 \item{z}{charge, default value is 1}
 
-\item{mode}{ionization mode, either positive '+', or negative '-'}
+\item{mode}{ionization mode, either positive '+' or negative '-'}
 }
 \description{
 calculate accurate ion mass
 }
 \examples{
- mz('C7H7O4', z = 1, mode = '+')
-}
-\author{
-Yonghui Dong
+mz('C7H7O4', z = 1, mode = '+')
 }
