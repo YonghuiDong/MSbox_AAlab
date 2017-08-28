@@ -15,8 +15,6 @@ adduct(F, mode = c("+", "-"))
 calculate common adduct ions in pos or neg ion mode
 }
 \examples{
-\dontrun{
 adduct('C1H4',mode = '-')
 adduct('C1H4',mode = '+')
-}
 }

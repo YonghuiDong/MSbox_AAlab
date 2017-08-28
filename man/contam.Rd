@@ -17,8 +17,6 @@ contam(mz, ppm = 10, mode = c("+", "-"))
 Check the possible contaminants
 }
 \examples{
-\dontrun{
- contam(33.033, ppm = 10, mode = '+')
+ contam(33.0335, ppm = 10, mode = '+')
  contam(44.998, ppm = 10, mode = '-')
-}
 }

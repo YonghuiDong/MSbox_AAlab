@@ -7,16 +7,14 @@
 E_iso(S)
 }
 \arguments{
-\item{S}{element, can be element symbol (i.e C) or full name (i.e. Carbon).
+\item{S}{element, can be element symbol (i.e. C) or full name (i.e. Carbon).
 Element symbol is case sensitive, which full name is case insensitive.}
 }
 \description{
 Check element isotope information
 }
 \examples{
-\dontrun{
  E_iso('C') # element symbol
  E_iso('Carbon') # element full name
  E_iso('carBon') # element full name
-}
 }

@@ -3,10 +3,9 @@
 #' @param F chemical formula, must be written in capital letters
 #' @param mode ionization mode, either positive '+' or negative '-'
 #' @export
-#' @examples \dontrun{
+#' @examples
 #' adduct('C1H4',mode = '-')
 #' adduct('C1H4',mode = '+')
-#' }
 
 adduct <- function(F, mode = c('+', '-')){
   if (mode == '+') {

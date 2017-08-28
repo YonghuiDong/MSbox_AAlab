@@ -4,16 +4,13 @@
 #' @param z charge, default value is 1
 #' @param mode ionization mode, either positive '+' or negative '-'
 #' @export
-#' @examples \dontrun{
+#' @examples
 #'  mz('C7H7O4', z = 1, mode = '+')
-#' }
-
 
 # calculate accurate ion mass
 mz <- function(m, z=1, mode = c('+', '-')) {
   ## read element data, and find the element with the highest abundance
-  load('R/element.rda')
-  element <- as.data.frame(element)
+  element <- as.data.frame(sysdata$element)
   element$Abund.<- as.numeric(element$Abund.)
   element.agg <- aggregate(Abund. ~ Class, element, max)
   element.max <- merge(element.agg, element)
