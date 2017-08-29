@@ -3,6 +3,7 @@
 #' @param m chemical formula of an ion
 #' @param z charge, default value is 1
 #' @param mode ionization mode, either positive '+' or negative '-'
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #'  mz('C7H7O4', z = 1, mode = '+')
