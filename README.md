@@ -5,8 +5,8 @@ Common MS tools for analytical chemistry
 # Installation 
 
 ```r
-install.packages("devtools")
-devtools::install_github("YonghuiDong/MSbox") 
+## stable version
+install.packages('MSbox')
 ```
 
 # Functions
