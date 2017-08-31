@@ -20,6 +20,8 @@ mz <- function(m, z=1, mode = c('+', '-')) {
   v1 <- strsplit(m, "(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", perl = TRUE)[[1]]
   atom <- v1[c(TRUE, FALSE)]
   num <- as.numeric(v1[c(FALSE, TRUE)])
+  if(mode != "+" & mode !="-")
+  {stop("WARNING: ion mode invalid. '+' or '-'.\n")}
   if (length(atom) == length(num)) {
     options(digits=12)
     atom_mass <- element.max$Mass[match(atom, element.max$Class)]

@@ -8,6 +8,8 @@
 #' adduct('C1H4',mode = '+')
 
 adduct <- function(F, mode = c('+', '-')){
+  if(mode != "+" & mode !="-")
+    {stop("WARNING: ion mode invalid. '+' or '-'.\n")}
   if (mode == '+') {
     pos_ion <- c('Li1', 'H3O1', 'N1H4', 'Na1', 'K1', 'C1H5O1', 'C2H4N1')
 

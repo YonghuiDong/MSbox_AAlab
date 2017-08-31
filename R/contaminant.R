@@ -13,6 +13,8 @@ contam <- function (mz, ppm = 10, mode = c('+', '-')) {
   contam_neg <- as.data.frame(sysdata$contam_neg)
   expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL),
                                          list(...))
+  if(mode != "+" & mode !="-")
+  {stop("WARNING: ion mode invalid. '+' or '-'.\n")}
   if(mode == '-') {
     contam.list <- expand.grid.df(mz, contam_neg)
     colnames(contam.list)[1] <- 'mymz'
