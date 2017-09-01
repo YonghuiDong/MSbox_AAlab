@@ -1,15 +1,17 @@
 #' @title accurate ion mass
 #' @description calculate accurate ion mass
 #' @param m chemical formula of an ion
-#' @param z charge, default value is 1
-#' @param mode ionization mode, either positive '+' or negative '-'
-#' @importFrom stats aggregate
+#' @param z charge
 #' @export
 #' @examples
-#'  mz('C7H7O4', z = 1, mode = '+')
+#'  mz('C7H7O4', z = 1)
+#'  mz('C10H6Cl1', z = -1)
 
 # calculate accurate ion mass
-mz <- function(m, z=1, mode = c('+', '-')) {
+mz <- function(m, z) {
+  # (1) issue warnings
+  if(any(z == 0)) {stop("WARNING: charge z = 0 ?")}
+  if(any(is.numeric(z) == FALSE)) {stop("WARNING: charge z shoule be numeric!")}
   ## read element data, and find the element with the highest abundance
   element <- as.data.frame(sysdata$element)
   element$Abund.<- as.numeric(element$Abund.)
@@ -20,20 +22,13 @@ mz <- function(m, z=1, mode = c('+', '-')) {
   v1 <- strsplit(m, "(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", perl = TRUE)[[1]]
   atom <- v1[c(TRUE, FALSE)]
   num <- as.numeric(v1[c(FALSE, TRUE)])
-  if(mode != "+" & mode !="-")
-  {stop("WARNING: ion mode invalid. '+' or '-'.\n")}
   if (length(atom) == length(num)) {
     options(digits=12)
     atom_mass <- element.max$Mass[match(atom, element.max$Class)]
-    if (mode == '+') {
-      accurate_mz <- (sum(atom_mass*num)-z*e)/z
-      return(accurate_mz)
-    } else if (mode == '-') {
-      accurate_mz <- (sum(atom_mass*num)+z*e)/z
-      return(accurate_mz)
-    } else
-      message ('Ion mode is not correct')
+    accurate_mz <- (sum(atom_mass*num)-z*e)/abs(z)
   }
   else
     message('Wrong chemical formula. If the numbers of some elements are missing?')
+  return(accurate_mz)
 }
+
