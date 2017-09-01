@@ -6,12 +6,14 @@
 #' @examples
 #'  mz('C7H7O4', z = 1)
 #'  mz('C10H6Cl1', z = -1)
+#'  mz('C7h7O4', z = 1) # case insensitive
 
 # calculate accurate ion mass
 mz <- function(m, z) {
   # (1) issue warnings
-  if(any(z == 0)) {stop("WARNING: charge z = 0 ?")}
-  if(any(is.numeric(z) == FALSE)) {stop("WARNING: charge z shoule be numeric!")}
+  if(z == 0) {stop("Warning: charge z = 0 ?")}
+  if(z%%1 != 0) {stop("Warning: charge z must be integer")}
+  if(is.numeric(z) == FALSE) {stop("Warning: charge z shoule be numeric!")}
   ## read element data, and find the element with the highest abundance
   element <- as.data.frame(sysdata$element)
   element$Abund.<- as.numeric(element$Abund.)
@@ -21,14 +23,15 @@ mz <- function(m, z) {
   ## split the mass formula
   v1 <- strsplit(m, "(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", perl = TRUE)[[1]]
   atom <- v1[c(TRUE, FALSE)]
+  # convert the first letter of atom to upper case. case insensitive.
+  atom <- paste(toupper(substr(atom, 1, 1)), substr(atom, 2, nchar(atom)), sep="")
   num <- as.numeric(v1[c(FALSE, TRUE)])
   if (length(atom) == length(num)) {
     options(digits=12)
     atom_mass <- element.max$Mass[match(atom, element.max$Class)]
     accurate_mz <- (sum(atom_mass*num)-z*e)/abs(z)
+    return(accurate_mz)
   }
   else
-    message('Wrong chemical formula. If the numbers of some elements are missing?')
-  return(accurate_mz)
+    message('Wrong chemical formula. Are numbers of some elements missing?')
 }
-
