@@ -1,9 +1,10 @@
 #' @title molecular mass
 #' @description calculate accurate molecular mass
-#' @param F chemical formula, must be written in capital letters
+#' @param F chemical formula, case insensitive
 #' @export
 #' @examples
 #'  M_mass('C7H6O4')
+#'  M_mass('c7H6O4') # case insensitive
 
 # calculate accurate molecular mass
 M_mass <- function(F) {
@@ -15,6 +16,8 @@ M_mass <- function(F) {
   ## split the mass formula
   v1 <- strsplit(F, "(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", perl = TRUE)[[1]]
   atom <- v1[c(TRUE, FALSE)]
+  # convert the first letter of atom to upper case. case insensitive.
+  atom <- paste(toupper(substr(atom, 1, 1)), substr(atom, 2, nchar(atom)), sep="")
   num <- as.numeric(v1[c(FALSE, TRUE)])
   if (length(atom) == length(num)) {
     options(digits=12)
