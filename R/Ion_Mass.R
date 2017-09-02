@@ -1,6 +1,6 @@
 #' @title accurate ion mass
 #' @description calculate accurate ion mass
-#' @param m chemical formula of an ion
+#' @param m chemical formula of an ion, case insensitive
 #' @param z charge
 #' @export
 #' @examples

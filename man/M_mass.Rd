@@ -7,11 +7,12 @@
 M_mass(F)
 }
 \arguments{
-\item{F}{chemical formula, must be written in capital letters}
+\item{F}{chemical formula, case insensitive}
 }
 \description{
 calculate accurate molecular mass
 }
 \examples{
  M_mass('C7H6O4')
+ M_mass('c7H6O4') # case insensitive
 }

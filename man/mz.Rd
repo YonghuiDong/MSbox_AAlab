@@ -4,18 +4,18 @@
 \alias{mz}
 \title{accurate ion mass}
 \usage{
-mz(m, z = 1, mode = c("+", "-"))
+mz(m, z)
 }
 \arguments{
-\item{m}{chemical formula of an ion}
+\item{m}{chemical formula of an ion, case insensitive}
 
-\item{z}{charge, default value is 1}
-
-\item{mode}{ionization mode, either positive '+' or negative '-'}
+\item{z}{charge}
 }
 \description{
 calculate accurate ion mass
 }
 \examples{
- mz('C7H7O4', z = 1, mode = '+')
+ mz('C7H7O4', z = 1)
+ mz('C10H6Cl1', z = -1)
+ mz('C7h7O4', z = 1) # case insensitive
 }
