@@ -1,6 +1,7 @@
 #' @title molecular mass
 #' @description calculate accurate molecular mass
 #' @param F chemical formula, case insensitive
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #'  M_mass('C7H6O4')
