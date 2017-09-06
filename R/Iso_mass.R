@@ -1,7 +1,8 @@
 #' @title Isotope labelled molecular mass
 #' @description Calculate isotope labelled molecular mass
 #' @param F, chemical formula, case insensitive
-#' @param iso, labelled elements, case insensitive
+#' @param iso, labelled elements, case sensitive
+#' @export
 #' @examples
 #' Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
 

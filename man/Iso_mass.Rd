@@ -2,13 +2,18 @@
 % Please edit documentation in R/Iso_mass.R
 \name{Iso_mass}
 \alias{Iso_mass}
-\title{c}
+\title{Isotope labelled molecular mass}
 \usage{
 Iso_mass(F, iso)
 }
+\arguments{
+\item{F, }{chemical formula, case insensitive}
+
+\item{iso, }{labelled elements, case sensitive}
+}
 \description{
-c
+Calculate isotope labelled molecular mass
 }
 \examples{
-iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
+Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
 }
