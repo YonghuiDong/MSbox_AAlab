@@ -11,7 +11,9 @@
 ppm <- function(m, t) {
     options(digits = 4)
     mz_dif <- m - t
+    mz_dif <- formatC(mz_dif, digits = 5, format = "f")
     ppm <- (m-t)/t*10^6
+    ppm <- formatC(ppm, digits = 3, format = "f")
     result <- as.data.frame(cbind(mz_dif = mz_dif, ppm = ppm))
     print.data.frame(result)
 }

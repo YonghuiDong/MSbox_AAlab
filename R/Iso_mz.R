@@ -3,6 +3,7 @@
 #' @param F, chemical formula, case insensitive
 #' @param iso, labelled elements, case insensitive
 #' @param z charge
+#' @importFrom stats aggregate
 #' @export
 #' @examples
 #' Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3', z = -1) # Two 13C and three 2H are labled

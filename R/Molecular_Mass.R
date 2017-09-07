@@ -26,8 +26,9 @@ M_mass <- function(F) {
   if (length(atom) == length(num)) {
     atom_mass <- element.max$Mass[match(atom, element.max$Class)]
     accurate_mass <- sum(atom_mass*num)
-    ## set 6
+    ## set 6 decimal
     accurate_mass = formatC(accurate_mass, digits = 6, format = "f")
+    accurate_mass <- as.numeric(accurate_mass)
     return(accurate_mass)
   }
   else
