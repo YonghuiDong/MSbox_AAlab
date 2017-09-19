@@ -9,7 +9,7 @@ Iso_mass(F, iso)
 \arguments{
 \item{F, }{chemical formula, case insensitive}
 
-\item{iso, }{labelled elements, case sensitive}
+\item{iso, }{labelled elements, case insensitive}
 }
 \description{
 Calculate isotope labelled molecular mass

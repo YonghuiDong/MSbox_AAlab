@@ -12,7 +12,7 @@ adduct(F, mode = c("+", "-"))
 \item{mode}{ionization mode, either positive '+' or negative '-'}
 }
 \description{
-calculate common adduct ions in pos or neg ion mode
+calculate common adduct ions in positive or negative ion mode
 }
 \examples{
 adduct('C1H4', mode = '-')

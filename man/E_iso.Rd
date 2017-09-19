@@ -11,11 +11,11 @@ E_iso(S)
 Both Element symbol and full name are case insensitive.}
 }
 \description{
-Check element isotope information
+check element isotope information
 }
 \examples{
  E_iso('Na') # element symbol
- E_iso('nA') # element symbol
+ E_iso('nA') # element symbol, case insensitive
  E_iso('Carbon') # element full name
- E_iso('carBon') # element full name
+ E_iso('carBon') # element full name, case insensitive
 }

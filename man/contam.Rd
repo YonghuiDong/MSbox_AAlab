@@ -14,7 +14,7 @@ contam(mz, ppm = 10, mode = c("+", "-"))
 \item{mode}{ionization mode, either positive '+' or negative '-'}
 }
 \description{
-Check the possible contaminants
+check the possible contaminants
 }
 \examples{
  contam(33.0335, ppm = 10, mode = '+')

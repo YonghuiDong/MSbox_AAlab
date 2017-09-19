@@ -8,8 +8,8 @@
 #'  mz('C10H6Cl1', z = -1)
 #'  mz('C7h7O4', z = 1) # case insensitive
 
-# calculate accurate ion mass
 mz <- function(m, z) {
+  options(digits = 12)
   #(1) issue warnings
   if(z == 0) {stop("Warning: charge z = 0 ?")}
   if(z%%1 != 0) {stop("Warning: charge z must be integer")}

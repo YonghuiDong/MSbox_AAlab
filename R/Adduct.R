@@ -1,5 +1,5 @@
 #' @title Common adducts
-#' @description calculate common adduct ions in pos or neg ion mode
+#' @description calculate common adduct ions in positive or negative ion mode
 #' @param F chemical formula, case insensitive
 #' @param mode ionization mode, either positive '+' or negative '-'
 #' @export
@@ -18,10 +18,10 @@ adduct <- function(F, mode = c('+', '-')){
     for (i in 1: length(pos_ion)) {
       M_adduct[i] = mz(paste(F, pos_ion[i], sep = ''), z = 1)
     }
-    adduct_info <- cbind(adduct = c('M+Li','M+H3O', 'M+NH4', 'M+Na', 'M+K', 'M+H+CH3OH',
+    adduct_info <- data.frame(adduct = c('M+Li','M+H3O', 'M+NH4', 'M+Na', 'M+K', 'M+H+CH3OH',
                                     'M+H+CH3CN'),
                          mz = M_adduct,
-                         source = c('Lithium salts', 'Ammonia/NH4OH', 'Water/Acids',
+                         source = c('Lithium salts', 'Water/Acids', 'Ammonia/NH4OH',
                                     'Sodium salts', 'Potassium salts', 'Methanol', 'Acetonitrile')
     )
     return(adduct_info)
@@ -32,7 +32,7 @@ adduct <- function(F, mode = c('+', '-')){
       M_adduct[i] = mz(paste(F, neg_ion[i], sep = ''), z = -1)
     }
     M_adduct <- c(M_adduct, mz(F,-1) + 36.965903)
-    adduct_info <- cbind(adduct = c('M-H+CH3OH','M-H+HCO2H','M-H+CH3CO2H', 'M-H+CF3CO2H',
+    adduct_info <- data.frame(adduct = c('M-H+CH3OH','M-H+HCO2H','M-H+CH3CO2H', 'M-H+CF3CO2H',
                                     'M+Cl(35)', 'M+Cl(37)'),
                          mz = M_adduct,
                          source = c('Methanol', 'Formic acid', 'Acetic acid', 'TFA',

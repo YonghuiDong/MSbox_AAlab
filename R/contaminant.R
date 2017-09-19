@@ -1,5 +1,5 @@
 #' @title Contaminants in MS
-#' @description Check the possible contaminants
+#' @description check the possible contaminants
 #' @param mz suspected m/z value
 #' @param ppm mass tolerance, default value = 10
 #' @param mode ionization mode, either positive '+' or negative '-'
@@ -32,7 +32,7 @@ contam <- function (mz, ppm = 10, mode = c('+', '-')) {
     if(nrow(Result) != 0) {
       return(Result)
     } else
-      message('Not Found')
+      message('Not Found, Unknown')
    }
  }
 

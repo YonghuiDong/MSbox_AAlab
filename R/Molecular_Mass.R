@@ -9,6 +9,7 @@
 
 M_mass <- function(F) {
   #(1) read element data, and find the element with the highest abundance
+  options(digits = 12)
   element <- as.data.frame(sysdata$element)
   element$Abund.<- as.numeric(element$Abund.)
   element.agg <- aggregate(Abund. ~ Class, element, max)

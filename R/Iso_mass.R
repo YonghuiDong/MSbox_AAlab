@@ -1,7 +1,7 @@
 #' @title Isotope labelled molecular mass
 #' @description Calculate isotope labelled molecular mass
 #' @param F, chemical formula, case insensitive
-#' @param iso, labelled elements, case sensitive
+#' @param iso, labelled elements, case insensitive
 #' @importFrom stats aggregate
 #' @export
 #' @examples
@@ -20,12 +20,12 @@ Iso_mass <- function(F, iso) {
   element.agg <- aggregate(Abund. ~ Class, element, max)
   element.max <- merge(element.agg, element)
   #(2) split iso
-  grx <- gregexpr("\\[.+?\\].+[[:digit:]]?",  iso)
-  let <- do.call(c, regmatches(iso, grx))
+  grx <- str_match_all(iso, "(\\[\\d+\\]\\p{L}+)(\\d+)")
+  ## into letter
+  let <- grx[[1]][,2]
   let <- toupper(let)
-  grx <- gregexpr("\\[.+?\\].+([[:digit:]]+)",  iso)
-  out <- do.call(c, regmatches(iso, grx))
-  iso_num <- gsub(".+\\][[:alpha:]]+", "", out)
+  ## into number
+  iso_num <- grx[[1]][,3]
   iso_num <- as.numeric(iso_num)
   #(3) check the number of labelled element should not exceed the number of that element
   ## prepare iso infomration
