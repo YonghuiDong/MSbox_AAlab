@@ -1,6 +1,6 @@
 # MSbox
 
-Common MS tools for analytical chemistry
+Common mass spectrometry tools for MS user.
 
 # Installation 
 
