@@ -3,6 +3,7 @@
 #' @param F, chemical formula, case insensitive
 #' @param iso, labelled elements, case insensitive
 #' @importFrom stats aggregate
+#' @importFrom stringr str_match_all
 #' @export
 #' @examples
 #' Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
@@ -10,7 +11,6 @@
 Iso_mass <- function(F, iso) {
   element <- as.data.frame(sysdata$element)
   #(1) format the database
-  ########################################
   ## replace '()' with '[]'
   element$Symbol <- chartr("()", "[]", element$Symbol)
   ## change the formact i.e. C[13] to [13]C
@@ -41,9 +41,9 @@ Iso_mass <- function(F, iso) {
   F_infor <- data.frame(atom, total_num)
   ## match iso in molecule
   index <- match(iso_infor$iso_atom_class, F_infor$atom)
-  if(any(is.na(index)) == TRUE) {stop("Warning: certain labelled element not found in the molecule")}
+  if(any(is.na(index)) == TRUE) {stop ("Warning: certain labelled element not found in the molecule")}
   if(any(iso_infor$iso_num > F_infor$total_num[index]) == TRUE)
-    {stop("Warning: The number certain labelled element exceeds the max number in the molecule")}
+    {stop ("Warning: The number of certain labelled element exceeds the max number in the molecule")}
   #(4) Calculate the iso mass
   # match iso
   iso_atom_mass <- element$Mass[match(let, element$Symbol)]

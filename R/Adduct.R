@@ -5,7 +5,7 @@
 #' @export
 #' @examples
 #' adduct('C1H4', mode = '-')
-#' adduct('C1H4', mode = '+')
+#' adduct('C1h4', mode = '+')
 
 adduct <- function(F, mode = c('+', '-')){
   F <- toupper(F)

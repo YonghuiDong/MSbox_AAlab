@@ -45,7 +45,7 @@ Iso_mz <- function(F, iso, z) {
   index <- match(iso_infor$iso_atom_class, F_infor$atom)
   if(any(is.na(index)) == TRUE) {stop("Warning: certain labelled element not found in the molecule")}
   if(any(iso_infor$iso_num > F_infor$total_num[index]) == TRUE)
-  {stop("Warning: The number certain labelled element exceeds the max number in the molecule")}
+  {stop("Warning: The number of certain labelled element exceeds the max number in the molecule")}
   #(4) Calculate the iso mass
   # match iso
   iso_atom_mass <- element$Mass[match(let, element$Symbol)]
