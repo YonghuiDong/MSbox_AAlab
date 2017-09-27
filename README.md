@@ -5,7 +5,7 @@ Common mass spectrometry tools for MS user.
 # Installation 
 
 ```r
-## stable version
+## stable version v1.0
 install.packages('MSbox')
 ```
 
