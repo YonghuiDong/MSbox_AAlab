@@ -62,7 +62,7 @@ Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
 example
 
 ```r
-Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
+Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3', z = 1) # Two 13C and three 2H are labled
 ```
 
 7. Check if an m/z value originates from possible contaminant
