@@ -14,7 +14,7 @@ Iso_mz(F, iso, z)
 \item{z}{charge}
 }
 \description{
-Calculate isotope labelled molecular mass
+Calculate isotope labelled m/z
 }
 \examples{
 Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3', z = -1) # Two 13C and three 2H are labled
