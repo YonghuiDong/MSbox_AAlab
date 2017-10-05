@@ -8,7 +8,7 @@
 #'  ppm(155.03383, .03388) # lazy input when the integer parts of m and t are the same
 #'  ppm(155.03384, mz('C7H7O4', z = 1)) # with ion formula
 
-ppm <- function(m, t) {
+ppm <- function(m, t, lazy = TRUE) {
   # split the theorectical m/z t, and extract the integer part
   t1 = unlist(strsplit(as.character(t),"\\."))[1]
   if(is.na(t1) == TRUE){t1 = 0}
@@ -27,7 +27,7 @@ ppm <- function(m, t) {
   t2 <- paste0(".", t2)
   t2 <- as.numeric(t2)
   # if the integer part of t is 0, which means it has the same inerger part as m
-  if (t1 == 0) {
+  if (t1 == 0 & lazy == TRUE) {
     mz_dif <- m2 - t2
     mz_dif <- formatC(mz_dif, digits = 5, format = "f")
     ppm <- (m2-t2)/(t2+m1)*10^6
