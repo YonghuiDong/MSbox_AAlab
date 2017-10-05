@@ -1,5 +1,5 @@
 #' @title Isotope labelled molecular mass
-#' @description Calculate isotope labelled molecular mass
+#' @description Calculate isotope labelled m/z
 #' @param F, chemical formula, case insensitive
 #' @param iso, labelled elements, case insensitive
 #' @param z charge
