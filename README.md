@@ -54,7 +54,7 @@ ppm(155.03384, mz('C7H7O4', z = 1)) # with ion formula
 example
 
 ```r
-Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
+Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled. Case insensitive.
 ```
 
 6. Calculate isotope labelled m/z
@@ -62,7 +62,7 @@ Iso_mass(F = 'C7H6O4', iso = '[13]C2[2]H3') # Two 13C and three 2H are labled
 example
 
 ```r
-Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3', z = 1) # Two 13C and three 2H are labled
+Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3', z = 1) # Two 13C and three 2H are labled. Case insensitive.
 ```
 
 7. Check if an m/z value originates from possible contaminant
