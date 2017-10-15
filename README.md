@@ -1,7 +1,6 @@
 # MSbox
 
 [![CRAN status](http://www.r-pkg.org/badges/version/MSbox)](https://cran.r-project.org/package=MSbox) 
-[![Download counter](http://cranlogs.r-pkg.org/badges/MSbox)](https://cran.r-project.org/package=MSbox)
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/MSbox)](https://cran.r-project.org/package=MSbox)
 
 
