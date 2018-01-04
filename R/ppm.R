@@ -2,6 +2,7 @@
 #' @description calculate the mass accuracy of measured m/z. lazy input allowed.
 #' @param m measured m/z
 #' @param t theoretical m/z
+#' @param lazy if lazy input is allowed
 #' @export
 #' @examples
 #'  ppm(155.03383, 155.03388) # with m/z value
