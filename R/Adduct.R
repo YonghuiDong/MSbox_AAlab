@@ -8,20 +8,24 @@
 #' adduct('C1h4', mode = '+')
 
 adduct <- function(F, mode = c('+', '-')){
+
+  #(1) check input
   F <- toupper(F)
   if(mode != "+" & mode !="-")
     {stop("WARNING: ion mode invalid. '+' or '-'.\n")}
-  if (mode == '+') {
-    pos_ion <- toupper(c('Li1', 'H3O1', 'N1H4', 'Na1', 'K1', 'C1H5O1', 'C2H4N1'))
+
+  #(2) main function
+   if (mode == '+') {
+    pos_ion <- toupper(c('H1','Li1', 'H3O1', 'N1H4', 'Na1', 'K1', 'C1H5O1', 'C2H4N1'))
 
     M_adduct <- vector(mode="character", length=length(pos_ion))
     for (i in 1: length(pos_ion)) {
       M_adduct[i] = mz(paste(F, pos_ion[i], sep = ''), z = 1)
     }
-    adduct_info <- data.frame(adduct = c('M+Li','M+H3O', 'M+NH4', 'M+Na', 'M+K', 'M+H+CH3OH',
+    adduct_info <- data.frame(adduct = c('M+H','M+Li','M+H3O', 'M+NH4', 'M+Na', 'M+K', 'M+H+CH3OH',
                                     'M+H+CH3CN'),
                          mz = M_adduct,
-                         source = c('Lithium salts', 'Water/Acids', 'Ammonia/NH4OH',
+                         source = c('Protonated','Lithium salts', 'Water/Acids', 'Ammonia/NH4OH',
                                     'Sodium salts', 'Potassium salts', 'Methanol', 'Acetonitrile')
     )
     return(adduct_info)
