@@ -56,7 +56,7 @@ Iso_mass <- function(F, iso) {
   mass_total_increase <- sum(mass_dif * iso_num)
 
   # calculate isto_mass
-  iso_mass <- M_mass(F) + mass_total_increase
+  iso_mass <- mass(F) + mass_total_increase
 
   return(iso_mass)
 }
