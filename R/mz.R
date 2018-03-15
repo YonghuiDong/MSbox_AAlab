@@ -7,13 +7,16 @@
 #'  mz('C7H7O4', z = 1)
 #'  mz('C10H6Cl1', z = -1)
 #'  mz('C7h7O4', z = 1) # case insensitive
+#'  mz(c('C7H7O4', 'c1'), z = -1) # vector input
 
 mz <- function(m, z) {
   options(digits = 12)
-  #(1) issue warnings
+
+  #(1) check input
   if(z == 0) {stop("Warning: charge z = 0 ?")}
   if(z%%1 != 0) {stop("Warning: charge z must be integer")}
   if(is.numeric(z) == FALSE) {stop("Warning: charge z shoule be numeric!")}
+
   #(2) read element data, and find the element with the highest abundance
   element <- as.data.frame(sysdata$element)
   element$Abund.<- as.numeric(element$Abund.)
@@ -21,7 +24,18 @@ mz <- function(m, z) {
   element.max <- merge(element.agg, element)
   element.max$Class <- toupper(element.max$Class)
   e <- 0.000548597 # mass of an electron
-  #(3) format input
+
+  #(3) allow the function to a vector of input
+  if (length(m) > 1) {
+    m = as.list(m)
+    acc_mz <- lapply(m, mz, z = z)
+    names(acc_mz) <- m
+    acc_mz <- unlist(acc_mz)
+    return(acc_mz)
+  }
+
+  #(4) main function
+  ## format input
   ## split the mass formula
   v1 <- strsplit(m, "(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", perl = TRUE)[[1]]
   atom <- v1[c(TRUE, FALSE)]

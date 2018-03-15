@@ -4,18 +4,30 @@
 #' @importFrom stats aggregate
 #' @export
 #' @examples
-#'  M_mass('C7H6O4')
-#'  M_mass('c7H6O4') # case insensitive
+#'  mass('C7H6O4')
+#'  mass('c7H6O4') # case insensitive
+#'  mass(c('K1', 'C5H8', 'nA20')) # vector input
 
-M_mass <- function(F) {
+mass <- function(F) {
+
   #(1) read element data, and find the element with the highest abundance
-  options(digits = 12)
   element <- as.data.frame(sysdata$element)
   element$Abund.<- as.numeric(element$Abund.)
   element.agg <- aggregate(Abund. ~ Class, element, max)
   element.max <- merge(element.agg, element)
   element.max$Class <- toupper(element.max$Class)
-  #(2) split the mass formula
+
+  #(2) allow the function to a vector of input
+  if (length(F) > 1) {
+    F = as.list(F)
+    acc_mass <- lapply(F, mass)
+    names(acc_mass) <- F
+    acc_mass <- unlist(acc_mass)
+    return(acc_mass)
+  }
+
+  #(3) main function
+  ## split the mass formula
   v1 <- strsplit(F, "(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", perl = TRUE)[[1]]
   atom <- v1[c(TRUE, FALSE)]
   ## convert the first letter of atom to upper case. case insensitive.
