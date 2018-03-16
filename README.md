@@ -9,7 +9,7 @@ Common mass spectrometry tools for minimalist MS user (short function names, les
 # Installation 
 
 ```r
-## stable version v1.0
+## stable version v1.1
 install.packages('MSbox')
 ```
 
@@ -30,7 +30,8 @@ E_iso('carBon') # element full name, case insensitive
 example:
 
 ```r
-M_mass('C7H6O1') # case insensitive
+mass('C7H6O1') # case insensitive
+mass(c('K1', 'C5H8', 'nA20')) # vector input
 ```
 
 3. Calculate exact m/z values
@@ -39,6 +40,7 @@ example:
 
 ```r
 mz('C7H7O4', z = -1) # case insensitive
+mz(c('C7H7O4', 'c1'), z = -1) # vector input
 ```
 
 4. Calculate the mass accuracy of measured m/z
