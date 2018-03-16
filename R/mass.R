@@ -20,9 +20,8 @@ mass <- function(F) {
   #(2) allow the function to a vector of input
   if (length(F) > 1) {
     F = as.list(F)
-    acc_mass <- lapply(F, mass)
+    acc_mass <- sapply(F, mass)
     names(acc_mass) <- F
-    acc_mass <- unlist(acc_mass)
     return(acc_mass)
   }
 

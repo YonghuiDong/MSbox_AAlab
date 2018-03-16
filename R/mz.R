@@ -28,9 +28,8 @@ mz <- function(m, z) {
   #(3) allow the function to a vector of input
   if (length(m) > 1) {
     m = as.list(m)
-    acc_mz <- lapply(m, mz, z = z)
+    acc_mz <- sapply(m, mz, z = z)
     names(acc_mz) <- m
-    acc_mz <- unlist(acc_mz)
     return(acc_mz)
   }
 
