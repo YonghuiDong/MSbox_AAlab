@@ -10,9 +10,10 @@
 #'  ppm(155.03384, mz('C7H7O4', z = 1)) # with ion formula
 
 ppm <- function(m, t, lazy = TRUE) {
+  # To disable scientific notation. This is important, otherwise it will bring bug when during spliting
+  options(scipen=999)
   # split the theorectical m/z t, and extract the integer part
   t1 = unlist(strsplit(as.character(t),"\\."))[1]
-  if(is.na(t1) == TRUE){t1 = 0}
   t1 <- as.numeric(t1)
   # split the measured m/z m, and extract the integer part
   m1 = unlist(strsplit(as.character(m),"\\."))[1]
