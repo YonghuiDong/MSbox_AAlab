@@ -4,7 +4,7 @@
 [![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/MSbox)](https://cran.r-project.org/package=MSbox)
 
 
-Common mass spectrometry tools for minimalist MS user (short function names, less paramers, and ease to use).
+Common mass spectrometry tools for minimalist MS users.
 
 # Installation 
 
