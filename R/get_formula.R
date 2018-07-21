@@ -14,6 +14,8 @@ formula <- function(chem, representation = 'formula') {
   ## restrict query time
   Sys.sleep(1.1)
   myread <- read_xml(chem_url)
+  ## check compound name
+  if (identical(myread, character(0)) == TRUE) {stop("Warning: compound name not found")}
   myresult <- xml_text(xml_find_all(myread, '//item'))[[1]]
   return(myresult)
 }
