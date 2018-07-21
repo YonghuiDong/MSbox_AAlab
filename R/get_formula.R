@@ -9,11 +9,11 @@
 #' formula('malic acid')
 
 formula <- function(chem, representation = 'formula') {
-  ref_url <- "https://cactus.nci.nih.gov/chemical/structure"
-  chem_url <- paste(ref_url, URLencode(chem), representation, 'xml', sep = '/')
+  root <- "https://cactus.nci.nih.gov/chemical/structure"
+  url <- paste(root, URLencode(chem), representation, 'xml', sep = '/')
   ## restrict query time
   Sys.sleep(1.1)
-  myread <- read_xml(chem_url)
+  myread <- read_xml(url)
   ## check compound name
   if (identical(myread, character(0)) == TRUE) {stop("Warning: compound name not found")}
   myresult <- xml_text(xml_find_all(myread, '//item'))[[1]]
