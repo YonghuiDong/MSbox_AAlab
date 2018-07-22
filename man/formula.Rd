@@ -2,17 +2,19 @@
 % Please edit documentation in R/get_formula.R
 \name{formula}
 \alias{formula}
-\title{Get compound formula}
+\title{Get compound formula and structure}
 \usage{
-formula(chem, representation = "formula")
+formula(chem, representation = "formula", info = FALSE)
 }
 \arguments{
 \item{chem, }{chemical name of the compound}
 
 \item{representation, }{representation methods, formula is default}
+
+\item{info, }{extra molecular information that users can query}
 }
 \description{
-get compound formula from https://cactus.nci.nih.gov/chemical/structure
+get compound formula and structure from https://cactus.nci.nih.gov/chemical/structure
 }
 \examples{
 formula('malic acid')
