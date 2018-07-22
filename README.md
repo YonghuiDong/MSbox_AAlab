@@ -85,7 +85,7 @@ contam(33.0335, ppm = 10, mode = '+')
 contam(44.998, ppm = 10, mode = '-')
 ```
 
-8. Calculate common adduct ions in pos or neg ion mode
+9. Calculate common adduct ions in pos or neg ion mode
 
 examples
 
