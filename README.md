@@ -25,7 +25,7 @@ E_iso('Carbon') # element full name, case insensitive
 E_iso('carBon') # element full name, case insensitive
 ```
 
-2. Get formula
+2. Get formula, structure and extra molecular information
 
 ```r
 formula('malic aicd')
