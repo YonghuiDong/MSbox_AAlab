@@ -28,7 +28,7 @@ E_iso('carBon') # element full name, case insensitive
 2. Get formula, structure and extra molecular information
 
 ```r
-formula('malic aicd')
+formula('malic acid')
 ```
 
 3. Calculate monoisitopic mass
