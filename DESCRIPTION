@@ -1,7 +1,7 @@
 Package: MSbox
 Type: Package
 Title: Mass Spectrometry Tools
-Version: 1.1
+Version: 1.1.1
 Author: Yonghui Dong
 Maintainer: Yonghui Dong <yonghui.dong@gmail.com>
 Description: Common mass spectrometry tools described in John Roboz (2013) <doi:10.1201/b15436>. It allows checking element
@@ -11,7 +11,8 @@ Description: Common mass spectrometry tools described in John Roboz (2013) <doi:
 Depends: R (>= 2.0.0)
 Imports:
  stringr,
- xml2
+ xml2,
+ magick
 License: GPL-2
 URL: https://github.com/YonghuiDong/MSbox
 BugReports: https://github.com/YonghuiDong/MSbox/issues/new
