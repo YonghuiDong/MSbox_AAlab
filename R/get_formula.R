@@ -9,26 +9,47 @@
 #' @export
 #' @examples
 #' formula('malic acid')
+#' formula(c('malic acid', 'citric acid', 'tartaric acid'))
 
 formula <- function(chem, representation = 'formula', info = FALSE) {
-  if(info == TRUE) {message('more molecular information can be obtained by setting the
-representation parameter to:mw, monoisotopic_mass, h_bond_donor_count, h_bond_acceptor_count,
-h_bond_center_count, rule_of_5_violation_count, rotor_count, effective_rotor_count, ring_count,
-ringsys_count, xlogp2, heteroatom_count, hydrogen_atom_count, heavy_atom_count,deprotonable_group_count, protonable_group_count')}
 
+  ##(1): display representation parameters
+  if(info == TRUE) {message('More molecular information can be obtained by setting the representation parameter to:
+mw, monoisotopic_mass, h_bond_donor_count, h_bond_acceptor_count, h_bond_center_count, rule_of_5_violation_count,
+rotor_count, effective_rotor_count, ring_count, ringsys_count, xlogp2, heteroatom_count, hydrogen_atom_count,
+heavy_atom_count,deprotonable_group_count, protonable_group_count')}
+
+  ##(2): query compound information
   root <- "https://cactus.nci.nih.gov/chemical/structure"
-  url <- paste(root, URLencode(chem), representation, 'xml', sep = '/')
-  ## restrict query time
-  Sys.sleep(1.1)
-  myread <- read_xml(url)
-  myresult <- xml_text(xml_find_all(myread, '//item'))
-  ## check compound name
-  if (identical(myresult, character(0)) == TRUE) {stop("Warning: compound name not found")}
-  myresult2 <- myresult[[1]]
-  url_image <- paste(root, URLencode(chem), 'image', sep = '/')
-  chem_image <- print(image_read(url_image), info = F)
-  return(myresult2)
-  return(chem_image)
+  ## define the lists
+  url <- vector("list", length = length(chem))
+  url_read <- vector("list", length = length(chem))
+  url_result <- vector("list", length = length(chem))
+  url_result2 <- vector("list", length = length(chem))
+  url_image <- vector("list", length = length(chem))
+  chem_image <- vector("list", length = length(chem))
+  anno_image <- vector("list", length = length(chem))
+
+  for (i in 1:length(chem)) {
+    ##(2.1) query compound formula
+    url[[i]] <- paste(root, URLencode(chem[i]), representation, 'xml', sep = '/')
+    url_read[[i]] <- read_xml(url[[i]])
+    url_result[[i]] <- xml_text(xml_find_all(url_read[[i]], '//item'))
+    ## check compound name
+    if (identical(url_result[[i]], character(0)) == TRUE) {stop("Warning: compound name not found")}
+    url_result2[[i]] <- url_result[[i]][[1]]
+
+    ##(2.2) query compound structure image
+    url_image[[i]] <- paste(root, URLencode(chem[i]), 'image', sep = '/')
+    chem_image[[i]] <- image_read(url_image[[i]])
+    anno_image[[i]] <- image_annotate(chem_image[[i]] , chem[i], size = 18, gravity = "south", color = "black")
+  }
+
+  ## combind and show compound structure image
+  combine_image <- do.call(c, anno_image)
+  print(image_append(combine_image), info = F)
+  names(url_result2) <- chem
+  ## display compound other information
+  message('The ', representation, ' and compound structure(s) are as following:' )
+  return(unlist(url_result2))
 }
-
-
