@@ -9,7 +9,7 @@ Common mass spectrometry tools for minimalist MS users.
 # Installation 
 
 ```r
-## stable version v1.1
+## stable version v1.1.1
 install.packages('MSbox')
 ```
 
@@ -25,10 +25,10 @@ E_iso('Carbon') # element full name, case insensitive
 E_iso('carBon') # element full name, case insensitive
 ```
 
-2. Get formula
+2. Get formula, structure and extra molecular information
 
 ```r
-formula('malic aicd')
+formula('malic acid')
 ```
 
 3. Calculate monoisitopic mass
@@ -85,7 +85,7 @@ contam(33.0335, ppm = 10, mode = '+')
 contam(44.998, ppm = 10, mode = '-')
 ```
 
-8. Calculate common adduct ions in pos or neg ion mode
+9. Calculate common adduct ions in pos or neg ion mode
 
 examples
 
