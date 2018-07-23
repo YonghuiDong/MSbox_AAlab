@@ -18,4 +18,5 @@ get compound formula and structure from https://cactus.nci.nih.gov/chemical/stru
 }
 \examples{
 formula('malic acid')
+formula(c('malic acid', 'citric acid', 'tartaric acid'))
 }
