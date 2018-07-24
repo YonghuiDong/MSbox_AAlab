@@ -58,7 +58,8 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
     ##(2.2) query compound structure image
     url_image[[i]] <- paste(root, URLencode(chem[i]), 'image', sep = '/')
     chem_image[[i]] <- image_read(url_image[[i]])
-    anno_image[[i]] <- image_annotate(chem_image[[i]] , chem[i], size = 18, gravity = "south", color = "black")
+    anno_image[[i]] <- image_annotate(chem_image[[i]] , paste(chem[i], paste(representation, ':', url_result2[[i]]), sep = '\n'), size = 18, gravity = "south", color = "black")
+    ##anno_image[[i]] <- image_annotate(chem_image[[i]] , url_result2[[i]], size = 18, gravity = "south", color = "black")
   }
 
   ## combind and show compound structure image
