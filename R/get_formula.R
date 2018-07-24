@@ -60,7 +60,8 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
     url_image[[i]] <- paste(root, URLencode(chem[i]), 'image', sep = '/')
     chem_image[[i]] <- image_read(url_image[[i]])
     anno_image[[i]] <- image_annotate(chem_image[[i]], chem[i], size = 18, gravity = "north", color = "black")
-    anno_image2[[i]] <- image_annotate(anno_image[[i]], paste(representation, ':', url_result2[[i]]), size = 18, gravity = "south", color = "black")
+    anno_image2[[i]] <- image_annotate(anno_image[[i]], paste(representation, ':', url_result2[[i]]),
+                                       size = 16, gravity = "south", color = "black")
   }
 
   ## combind and show compound structure image
@@ -69,5 +70,5 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
   names(url_result2) <- chem
   ## display compound other information
   message('The ', representation, ' and compound structure(s) are as following:' )
-  return(unlist(url_result2))
+  noquote(unlist(url_result2))
 }
