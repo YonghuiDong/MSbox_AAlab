@@ -45,6 +45,7 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
   url_image <- vector("list", length = length(chem))
   chem_image <- vector("list", length = length(chem))
   anno_image <- vector("list", length = length(chem))
+  anno_image2 <- vector("list", length = length(chem))
 
   for (i in 1:length(chem)) {
     ##(2.1) query compound formula
@@ -58,12 +59,12 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
     ##(2.2) query compound structure image
     url_image[[i]] <- paste(root, URLencode(chem[i]), 'image', sep = '/')
     chem_image[[i]] <- image_read(url_image[[i]])
-    anno_image[[i]] <- image_annotate(chem_image[[i]] , paste(chem[i], paste(representation, ':', url_result2[[i]]), sep = '\n'), size = 18, gravity = "south", color = "black")
-    ##anno_image[[i]] <- image_annotate(chem_image[[i]] , url_result2[[i]], size = 18, gravity = "south", color = "black")
+    anno_image[[i]] <- image_annotate(chem_image[[i]], chem[i], size = 18, gravity = "north", color = "black")
+    anno_image2[[i]] <- image_annotate(anno_image[[i]], paste(representation, ':', url_result2[[i]]), size = 18, gravity = "south", color = "black")
   }
 
   ## combind and show compound structure image
-  combine_image <- do.call(c, anno_image)
+  combine_image <- do.call(c, anno_image2)
   print(image_append(combine_image), info = F)
   names(url_result2) <- chem
   ## display compound other information
