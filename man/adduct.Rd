@@ -18,3 +18,6 @@ calculate common adduct ions in positive or negative ion mode
 adduct('C1H4', mode = '-')
 adduct('C1h4', mode = '+')
 }
+\author{
+Yonghui Dong
+}

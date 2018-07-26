@@ -14,10 +14,13 @@ ppm(m, t, lazy = TRUE)
 \item{lazy}{if lazy input is allowed}
 }
 \description{
-calculate the mass accuracy of measured m/z. lazy input allowed.
+calculate the mass accuracy of measured m/z. lazy input allowed
 }
 \examples{
  ppm(155.03383, 155.03388) # with m/z value
  ppm(155.03383, .03388) # lazy input when the integer parts of m and t are the same
  ppm(155.03384, mz('C7H7O4', z = 1)) # with ion formula
+}
+\author{
+Yonghui Dong
 }

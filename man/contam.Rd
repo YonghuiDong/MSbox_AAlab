@@ -20,3 +20,6 @@ check the possible contaminants
  contam(33.0335, ppm = 10, mode = '+')
  contam(44.998, ppm = 10, mode = '-')
 }
+\author{
+Yonghui Dong
+}

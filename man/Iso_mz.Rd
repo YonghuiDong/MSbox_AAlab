@@ -19,3 +19,6 @@ Calculate isotope labelled m/z
 \examples{
 Iso_mz(F = 'C7H6O4', iso = '[13]C2[2]H3', z = -1) # Two 13C and three 2H are labled
 }
+\author{
+Yonghui Dong
+}

@@ -19,3 +19,6 @@ check element isotope information
  E_iso('Carbon') # element full name
  E_iso('carBon') # element full name, case insensitive
 }
+\author{
+Yonghui Dong
+}

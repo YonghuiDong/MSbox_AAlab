@@ -20,3 +20,6 @@ get compound formula and structure from https://cactus.nci.nih.gov/chemical/stru
 formula('malic acid')
 formula(c('malic acid', 'citric acid', 'tartaric acid'))
 }
+\author{
+Yonghui Dong
+}
