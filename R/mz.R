@@ -1,5 +1,6 @@
 #' @title accurate ion mass
 #' @description calculate accurate ion mass
+#' @author Yonghui Dong
 #' @param m chemical formula of an ion, case insensitive
 #' @param z charge
 #' @export

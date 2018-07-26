@@ -1,5 +1,6 @@
 #' @title mass accuracy
-#' @description calculate the mass accuracy of measured m/z. lazy input allowed.
+#' @description calculate the mass accuracy of measured m/z. lazy input allowed
+#' @author Yonghui Dong
 #' @param m measured m/z
 #' @param t theoretical m/z
 #' @param lazy if lazy input is allowed

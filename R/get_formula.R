@@ -1,5 +1,6 @@
 #' @title Get compound formula and structure
 #' @description get compound formula and structure from https://cactus.nci.nih.gov/chemical/structure
+#' @author Yonghui Dong
 #' @param chem, chemical name of the compound
 #' @param representation, representation methods, formula is default
 #' @param info, extra molecular information that users can query

@@ -1,5 +1,6 @@
 #' @title Isotope labelled molecular mass
 #' @description Calculate isotope labelled molecular mass
+#' @author Yonghui Dong
 #' @param F, chemical formula, case insensitive
 #' @param iso, labelled elements, case insensitive
 #' @importFrom stats aggregate

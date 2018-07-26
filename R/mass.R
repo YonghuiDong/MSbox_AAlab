@@ -1,5 +1,6 @@
 #' @title molecular mass
 #' @description calculate accurate molecular mass
+#' @author Yonghui Dong
 #' @param F chemical formula, case insensitive
 #' @importFrom stats aggregate
 #' @export

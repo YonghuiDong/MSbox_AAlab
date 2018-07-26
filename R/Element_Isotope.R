@@ -1,5 +1,6 @@
 #' @title Element isotopes
 #' @description check element isotope information
+#' @author Yonghui Dong
 #' @param S element, can be element symbol (i.e. C) or full name (i.e. Carbon).
 #' Both Element symbol and full name are case insensitive.
 #' @export
