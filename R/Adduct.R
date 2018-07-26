@@ -1,5 +1,6 @@
 #' @title Common adducts
 #' @description calculate common adduct ions in positive or negative ion mode
+#' @author Yonghui Dong
 #' @param F chemical formula, case insensitive
 #' @param mode ionization mode, either positive '+' or negative '-'
 #' @export
