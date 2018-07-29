@@ -17,8 +17,7 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
   ##(1): display representation parameters
   if(info == TRUE) {message('More molecular information can be obtained by setting the representation parameter to:
 
---------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------
+[===========================================================================================]
 
 (1) mw: molecular weight,
 (2) monoisotopic_mass: monoisotopic_mass,
@@ -37,8 +36,7 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
 (15) deprotonable_group_count,
 (16) protonable_group_count,
 
---------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------')}
+[===========================================================================================]')}
 
   ##(2): query compound information
   root <- "https://cactus.nci.nih.gov/chemical/structure"
