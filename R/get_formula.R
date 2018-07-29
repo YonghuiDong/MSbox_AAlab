@@ -17,6 +17,9 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
   ##(1): display representation parameters
   if(info == TRUE) {message('More molecular information can be obtained by setting the representation parameter to:
 
+--------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------
+
 (1) mw: molecular weight,
 (2) monoisotopic_mass: monoisotopic_mass,
 (3) h_bond_donor_count: number of hydrogen bond donors,
@@ -32,8 +35,9 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
 (13) hydrogen_atom_count,
 (14) heavy_atom_count,
 (15) deprotonable_group_count,
-(16) protonable_group_count
+(16) protonable_group_count,
 
+--------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------')}
 
   ##(2): query compound information
