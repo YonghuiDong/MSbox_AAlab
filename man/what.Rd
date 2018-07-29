@@ -4,7 +4,7 @@
 \alias{what}
 \title{search for m/z in home database}
 \usage{
-what(mz, mode = c("+", "-"), ppm = 10, parent = TRUE)
+what(mz, mode = c("+", "-"), ppm = 10, relatives = FALSE)
 }
 \arguments{
 \item{mz}{m/z value}
@@ -13,14 +13,14 @@ what(mz, mode = c("+", "-"), ppm = 10, parent = TRUE)
 
 \item{ppm}{mass tolerance, default value = 10}
 
-\item{parent, }{if parent, adducts and fragments should shown}
+\item{relatives, }{shuould the corresponding adducts, fragments and parent ions shown}
 }
 \description{
 tentative metabolite identification based on m/z value search in a home database
 }
 \examples{
  what(133.014, ppm = 10, mode = '-')
- what(133.014, ppm = 10, mode = '-', parent = FALSE)
+ what(133.014, ppm = 10, mode = '-', relative = TRUE)
 }
 \author{
 Yonghui Dong

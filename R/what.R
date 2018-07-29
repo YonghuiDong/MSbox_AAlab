@@ -4,13 +4,13 @@
 #' @param mz  m/z value
 #' @param ppm mass tolerance, default value = 10
 #' @param mode ionization mode, either positive '+' or negative '-'
-#' @param parent, if parent, adducts and fragments should shown
+#' @param relatives, shuould the corresponding adducts, fragments and parent ions shown
 #' @export
 #' @examples
 #'  what(133.014, ppm = 10, mode = '-')
-#'  what(133.014, ppm = 10, mode = '-', parent = FALSE)
+#'  what(133.014, ppm = 10, mode = '-', relative = TRUE)
 
-what <- function (mz, mode = c('+', '-'), ppm = 10, parent = TRUE) {
+what <- function (mz, mode = c('+', '-'), ppm = 10, relatives = FALSE) {
 
   ##(1) input check
   if(is.numeric(mz) == FALSE) {stop("Warning: mass to charge ratio mz shoule be numeric!")}
@@ -35,11 +35,14 @@ what <- function (mz, mode = c('+', '-'), ppm = 10, parent = TRUE) {
     Result = DB.list[(myppm <= ppm), ]
   }
 
-  ##(4) return result
+  ##(4) check if Result is empty
+  if(nrow(Result) == 0) stop('Not Found, Unknown')
+
+  ##(5) return result
   if(nrow(Result) != 0) {
    ## include rows which have the same ID as the selected m/z (same parent ion).
     search_result <- DB.list[DB.list$ID %in% Result$ID,]
   } else
     message('Not Found, unknown')
-  ifelse(parent == TRUE, return(search_result), return(Result))
+  ifelse(relatives == TRUE, return(search_result), return(Result))
 }
