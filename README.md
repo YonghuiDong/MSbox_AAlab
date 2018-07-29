@@ -27,8 +27,10 @@ E_iso('carBon') # element full name, case insensitive
 
 2. Get formula, structure and extra molecular information
 
+examples:
 ```r
 formula('malic acid')
+formula(c('malic acid', 'citric acid', 'tartaric acid'))
 ```
 
 3. Calculate monoisitopic mass
