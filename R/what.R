@@ -1,15 +1,16 @@
 #' @title search for m/z in home database
-#' @description tentatively metabolite identification based on m/z value search in a home database
+#' @description tentative metabolite identification based on m/z value search in a home database
 #' @author Yonghui Dong
 #' @param mz  m/z value
 #' @param ppm mass tolerance, default value = 10
 #' @param mode ionization mode, either positive '+' or negative '-'
+#' @param parent, if parent, adducts and fragments should shown
 #' @export
 #' @examples
 #'  what(133.014, ppm = 10, mode = '-')
-#'  what(44.998, ppm = 10, mode = '-')
+#'  what(133.014, ppm = 10, mode = '-', parent = FALSE)
 
-what <- function (mz, mode = c('+', '-'), ppm = 10) {
+what <- function (mz, mode = c('+', '-'), ppm = 10, parent = TRUE) {
 
   ##(1) input check
   if(is.numeric(mz) == FALSE) {stop("Warning: mass to charge ratio mz shoule be numeric!")}
@@ -38,7 +39,7 @@ what <- function (mz, mode = c('+', '-'), ppm = 10) {
   if(nrow(Result) != 0) {
    ## include rows which have the same ID as the selected m/z (same parent ion).
     search_result <- DB.list[DB.list$ID %in% Result$ID,]
-    return(search_result)
   } else
     message('Not Found, unknown')
+  ifelse(parent == TRUE, return(search_result), return(Result))
 }
