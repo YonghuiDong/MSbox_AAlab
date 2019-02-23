@@ -5,7 +5,6 @@
 #' @param representation, representation methods, formula is default
 #' @param info, extra molecular information that users can query
 #' @import xml2
-#' @import magick
 #' @importFrom utils URLencode
 #' @export
 #' @examples
@@ -45,10 +44,6 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
   url_read <- vector("list", length = length(chem))
   url_result <- vector("list", length = length(chem))
   url_result2 <- vector("list", length = length(chem))
-  url_image <- vector("list", length = length(chem))
-  chem_image <- vector("list", length = length(chem))
-  anno_image <- vector("list", length = length(chem))
-  anno_image2 <- vector("list", length = length(chem))
 
   for (i in 1:length(chem)) {
     ##(2.1) query compound formula
@@ -58,20 +53,10 @@ formula <- function(chem, representation = 'formula', info = FALSE) {
     ## check compound name
     if (identical(url_result[[i]], character(0)) == TRUE) {stop("Warning: compound name not found")}
     url_result2[[i]] <- url_result[[i]][[1]]
-
-    ##(2.2) query compound structure image
-    url_image[[i]] <- paste(root, URLencode(chem[i]), 'image', sep = '/')
-    chem_image[[i]] <- image_read(url_image[[i]])
-    anno_image[[i]] <- image_annotate(chem_image[[i]], chem[i], size = 18, gravity = "north", color = "black")
-    anno_image2[[i]] <- image_annotate(anno_image[[i]], paste(representation, ':', url_result2[[i]]),
-                                       size = 16, gravity = "south", color = "black")
   }
 
-  ## combind and show compound structure image
-  combine_image <- do.call(c, anno_image2)
-  print(image_append(combine_image), info = F)
-  names(url_result2) <- chem
   ## display compound other information
+  names(url_result2) <- chem
   message('The ', representation, ' and compound structure(s) are as following:' )
   noquote(unlist(url_result2))
 }
