@@ -102,5 +102,5 @@ adduct('C1H4', mode = '+') # case insensitive
 what(1034.556, mode = "+", ppm = 3) # single m/z value
 
 mzs <- rep(133.014, 300)
-what(mz, "-") # multiple m/z values, default ppm = 5
+what(mzs, "-") # multiple m/z values, default ppm = 5
 ```
