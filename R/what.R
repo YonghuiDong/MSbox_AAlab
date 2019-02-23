@@ -23,8 +23,8 @@ what <- function (mz, mode = NULL, ppm = 5) {
 
   if(mode == '-') {
     for (i in 1:length(mz)) {
-      width <- options()$width * 0.6
-      cat(paste0(rep(intToUtf8(0x2698), i / length(mz) * width), collapse = ''))
+      width <- options()$width * 0.3
+      cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mz) * width), collapse = ''))
       cat(paste0(round(i / length(mz) * 100), '% completed'))
       DB.list <- expand.grid.df(mz[i], DB[, -(3:5)])
       colnames(DB.list)[1] <- "search"
@@ -37,8 +37,8 @@ what <- function (mz, mode = NULL, ppm = 5) {
     }
   } else {
     for (i in 1:length(mz)) {
-      width <- options()$width * 0.6
-      cat(paste0(rep(intToUtf8(0x2698), i / length(mz) * width), collapse = ''))
+      width <- options()$width * 0.3
+      cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mz) * width), collapse = ''))
       cat(paste0(round(i / length(mz) * 100), '% completed'))
       ## get [M+H]
       DB.list_H <- expand.grid.df(mz[i], "[M+H]+", DB[, -(4:6)])
