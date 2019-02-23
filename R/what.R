@@ -23,7 +23,7 @@ what <- function (mz, mode = NULL, ppm = 5) {
 
   if(mode == '-') {
     for (i in 1:length(mz)) {
-      width <- options()$width - 50
+      width <- options()$width * 0.6
       cat(paste0(rep(intToUtf8(0x2698), i / length(mz) * width), collapse = ''))
       cat(paste0(round(i / length(mz) * 100), '% completed'))
       DB.list <- expand.grid.df(mz[i], DB[, -(3:5)])
@@ -37,7 +37,7 @@ what <- function (mz, mode = NULL, ppm = 5) {
     }
   } else {
     for (i in 1:length(mz)) {
-      width <- options()$width - 50
+      width <- options()$width * 0.6
       cat(paste0(rep(intToUtf8(0x2698), i / length(mz) * width), collapse = ''))
       cat(paste0(round(i / length(mz) * 100), '% completed'))
       ## get [M+H]
