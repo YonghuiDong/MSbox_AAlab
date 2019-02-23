@@ -2,9 +2,9 @@
 % Please edit documentation in R/what.R
 \name{what}
 \alias{what}
-\title{search for m/z in home database}
+\title{search for m/z in from the idiom metabolomics database}
 \usage{
-what(mz, mode = c("+", "-"), ppm = 10, relatives = FALSE)
+what(mz, mode = c("+", "-"), ppm = 10)
 }
 \arguments{
 \item{mz}{m/z value}
@@ -12,15 +12,12 @@ what(mz, mode = c("+", "-"), ppm = 10, relatives = FALSE)
 \item{mode}{ionization mode, either positive '+' or negative '-'}
 
 \item{ppm}{mass tolerance, default value = 10}
-
-\item{relatives, }{shuould the corresponding adducts, fragments and parent ions shown}
 }
 \description{
-tentative metabolite identification based on m/z value search in a home database
+tentative metabolite identification based on m/z value search
 }
 \examples{
  what(133.014, ppm = 10, mode = '-')
- what(133.014, ppm = 10, mode = '-', relative = TRUE)
 }
 \author{
 Yonghui Dong
