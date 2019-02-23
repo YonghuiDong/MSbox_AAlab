@@ -92,6 +92,15 @@ contam(44.998, ppm = 10, mode = '-')
 examples
 
 ```r
-adduct('C1H4',mode = '-') # case insensitive
-adduct('C1H4',mode = '+') # case insensitive
+adduct('C1H4', mode = '-') # case insensitive
+adduct('C1H4', mode = '+') # case insensitive
+```
+
+10. Annotate the m/z values according to m/z value matching
+
+```r
+what(1034.556, mode = "+", ppm = 3) # single m/z value
+
+mzs <- rep(133.014, 300)
+what(mzs, "-") # multiple m/z values, default ppm = 5
 ```
