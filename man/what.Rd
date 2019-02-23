@@ -4,10 +4,10 @@
 \alias{what}
 \title{search for m/z in from the idiom metabolomics database}
 \usage{
-what(mz, mode = c("+", "-"), ppm = 10)
+what(mz, mode = NULL, ppm = 5)
 }
 \arguments{
-\item{mz}{m/z value}
+\item{mz}{m/z values}
 
 \item{mode}{ionization mode, either positive '+' or negative '-'}
 
