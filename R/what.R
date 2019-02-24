@@ -26,12 +26,13 @@ what <- function (mz, mode = NULL, ppm = 5) {
       width <- options()$width * 0.3
       cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mz) * width), collapse = ''))
       cat(paste0(round(i / length(mz) * 100), '% completed'))
-      DB.list <- expand.grid.df(mz[i], DB[, -(3:5)])
-      colnames(DB.list)[1] <- "search"
-      cal_ppm <- with(DB.list, (DB.list$`[M-H]` - search) * 10^6 / DB.list$`[M-H]`)
+      DB.list <- expand.grid.df(i, mz[i], DB[, -(3:5)])
+      colnames(DB.list)[c(1, 2)] <- c("QueryID", "Search")
+      cal_ppm <- with(DB.list, (DB.list$`[M-H]` - Search) * 10^6 / DB.list$`[M-H]`)
       cal_ppm <-  round(cal_ppm, digits = 2)
       DB.list <- cbind(DB.list, ppm = cal_ppm)
       Result[[i]] = DB.list[(abs(cal_ppm) <= ppm), ]
+      row.names(Result[[i]]) <- NULL
       if (i == length(mz)) cat(': Searching Done.')
       else cat('\014')
     }
@@ -41,20 +42,21 @@ what <- function (mz, mode = NULL, ppm = 5) {
       cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mz) * width), collapse = ''))
       cat(paste0(round(i / length(mz) * 100), '% completed'))
       ## get [M+H]
-      DB.list_H <- expand.grid.df(mz[i], "[M+H]+", DB[, -(4:6)])
-      colnames(DB.list_H)[c(1, 2, 5)] <- c("search", "Adduct", "mzs")
+      DB.list_H <- expand.grid.df(i, mz[i], "[M+H]+", DB[, -(4:6)])
+      colnames(DB.list_H)[c(1, 2, 3, 6)] <- c("QueryID", "Search", "Adduct", "mzs")
       ## get [M+Na]
-      DB.list_Na <- expand.grid.df(mz[i], "[M+Na]+", DB[, -c(3, 5, 6)])
-      colnames(DB.list_Na)[c(1, 2, 5)] <- c("search", "Adduct", "mzs")
+      DB.list_Na <- expand.grid.df(i, mz[i], "[M+Na]+", DB[, -c(3, 5, 6)])
+      colnames(DB.list_Na)[c(1, 2, 3, 6)] <- c("QueryID", "Search", "Adduct", "mzs")
       ## get [M+K]
-      DB.list_K <- expand.grid.df(mz[i], "[M+K]+", DB[, -c(3, 4, 6)])
-      colnames(DB.list_K)[c(1, 2, 5)] <- c("search", "Adduct", "mzs")
+      DB.list_K <- expand.grid.df(i, mz[i], "[M+K]+", DB[, -c(3, 4, 6)])
+      colnames(DB.list_K)[c(1, 2, 3, 6)] <- c("QueryID", "Search", "Adduct", "mzs")
       ## combine them
       DB.list <- rbind(DB.list_H, DB.list_Na, DB.list_K)
-      cal_ppm <- with(DB.list, (mzs - search) * 10^6 / mzs)
+      cal_ppm <- with(DB.list, (mzs - Search) * 10^6 / mzs)
       cal_ppm <-  round(cal_ppm, digits = 2)
       DB.list <- cbind(DB.list, ppm = cal_ppm)
       Result[[i]] = DB.list[(abs(cal_ppm) <= ppm), ]
+      row.names(Result[[i]]) <- NULL
       if (i == length(mz)) cat(': Searching Done.')
       else cat('\014')
     }
