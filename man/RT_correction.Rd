@@ -4,7 +4,8 @@
 \alias{RT_correction}
 \title{Retention time calibration}
 \usage{
-RT_correction(xset, ppm = 10, rt = 50, anchors = "LIPIDOMICS")
+RT_correction(xset, ppm = 10, rt = 50, anchors = NULL,
+  use.DB = "LIPIDOMICS", mode = "+")
 }
 \arguments{
 \item{xset}{xcms object}
@@ -14,12 +15,18 @@ RT_correction(xset, ppm = 10, rt = 50, anchors = "LIPIDOMICS")
 \item{rt}{retention time search window, default value = 50}
 
 \item{anchors}{lipidomics or metabolomics reference peaks}
+
+\item{use.DB}{which database is used for peak identification, choose between "Lipidomics" and "Metabolomics".}
+
+\item{mode}{ionization mode, positive "+" or negative "-".}
 }
 \description{
 calibrate RT according to reference peaks
 }
 \examples{
- a = 1+1
+\dontrun{
+RT.DB <- RT_correction(xset, use.DB = "Lipidomics", mode = "+")
+}
 }
 \author{
 Yonghui Dong
