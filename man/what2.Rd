@@ -4,8 +4,9 @@
 \alias{what2}
 \title{metabolite/lipid identification}
 \usage{
-what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE,
-  RT.cor.method = "L", frag = T, ppm = 10, rt = 25)
+what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+",
+  RT.cor = TRUE, RT.cor.method = "L", frag = T, ppm = 10,
+  rt = 25)
 }
 \arguments{
 \item{xset}{xcms object}
@@ -13,6 +14,8 @@ what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE,
 \item{RT.DB}{correction RT result from RT_correct()}
 
 \item{use.DB}{which database is used for peak identification, choose between "Lipidomics" and "Metabolomics".}
+
+\item{mode}{ionization mode, positive "+" or negative "-".}
 
 \item{RT.cor}{should use corrected RT}
 

@@ -4,6 +4,7 @@
 #' @param xset xcms object
 #' @param RT.DB correction RT result from RT_correct()
 #' @param use.DB which database is used for peak identification, choose between "Lipidomics" and "Metabolomics".
+#' @param mode ionization mode, positive "+" or negative "-".
 #' @param RT.cor should use corrected RT
 #' @param RT.cor.method which corrected RT should be used? L: linear regression (default) or P: polynomial regression?
 #' @param frag should search fragment
@@ -16,7 +17,8 @@
 #'my_compound <- what2(xset)
 #'}
 
-what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE, RT.cor.method = "L", frag = T, ppm = 10, rt = 25) {
+what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.cor = TRUE,
+                   RT.cor.method = "L", frag = T, ppm = 10, rt = 25) {
 
   #(1) input check
   if(class(xset) != "xcmsSet") {stop("the input object is not an xcmsSet object")}
@@ -26,17 +28,20 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE, R
   if(rt < 0){stop("RT window should be positive")}
   if(!(toupper(RT.cor.method) %in% c("L", "P")) == TRUE) {stop("wrong RT correction method")}
   if(!(toupper(use.DB) %in% c("METABOLOMICS", "LIPIDOMICS")) == TRUE) {stop("wrong DB selected")}
+  if(!(mode %in% c("+", "-")) == TRUE) {stop("wrong ion mode, select '+' or '-'")}
 
   #(2) select DB
-  if(toupper(use.DB) == "METABOLOMICS") {DB <- as.data.frame(sysdata$metabolite_db)}
-  if(toupper(use.DB) == "LIPIDOMICS") {DB <- as.data.frame(sysdata$lipid_db)}
+  if(toupper(use.DB) == "METABOLOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Metabolite_DB_pos)}
+  if(toupper(use.DB) == "METABOLOMICS" & mode == "-") {DB <- as.data.frame(sysdata$Metabolite_DB_neg)}
+  if(toupper(use.DB) == "LIPIDOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Lipid_DB_pos)}
 
 
-  if(!isTRUE(RT.cor) == TRUE) {
+  if(isTRUE(RT.cor) == TRUE) {
     if(dim(RT.DB)[1] != dim(DB)[1]) {stop("wrong RT correction DB, did you recalibrate your DB?")}
     if(toupper(RT.cor.method)  == "L") {DB$rt = RT.DB$rt_correct_l}
     if(toupper(RT.cor.method)  == "P") {DB$rt = RT.DB$rt_correct_p}
-    }
+  }
+
 
   #(3) prepare the data, seperate MS1 and MS2
   pheno_levels <- levels(xset@phenoData$class)
@@ -64,32 +69,22 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE, R
   Result <- vector("list", length(mymz))
 
   for (i in 1:length(mymz)) {
+
     ##(4.1) for MS1
     width <- options()$width * 0.3
     cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mymz) * width), collapse = ''))
     cat(paste0(round(i / length(mymz) * 100), '% completed'))
-    ## get [M+H]
-    DB.list_H <- expand.grid.df(i, mymz[i], myrt[i], "[M+H]+", DB[, -c(6, 7, 8)])
-    colnames(DB.list_H)[c(1:4, 9)] <- c("QueryID", "My.mz", "My.RT", "Adduct", "T.mz")
-    ## get [M+Na]
-    DB.list_Na <- expand.grid.df(i, mymz[i], myrt[i], "[M+Na]+", DB[, -c(5, 7, 8)])
-    colnames(DB.list_Na)[c(1:4, 9)] <- c("QueryID", "My.mz", "My.RT", "Adduct", "T.mz")
-    ## get [M+K]
-    DB.list_K <- expand.grid.df(i, mymz[i], myrt[i], "[M+K]+", DB[, -c(5, 6, 8)])
-    colnames(DB.list_K)[c(1:4, 9)] <- c("QueryID", "My.mz", "My.RT", "Adduct", "T.mz")
+    DB.list <- expand.grid.df(i, mymz[i], myrt[i], DB)
+    colnames(DB.list)[c(1:3)] <- c("QueryID", "My.mz", "My.RT")
 
-    ## get [M+NH4]
-    DB.list_NH4 <- expand.grid.df(i, mymz[i], myrt[i], "[M+NH4]+", DB[, -c(5, 6, 7)])
-    colnames(DB.list_NH4)[c(1:4, 9)] <- c("QueryID", "My.mz", "My.RT", "Adduct", "T.mz")
-    ## combine them
-    DB.list <- rbind(DB.list_H, DB.list_Na, DB.list_NH4)
     ## filter accoding to ppm and RT
     cal_ppm <- with(DB.list, (T.mz - My.mz) * 10^6 / T.mz)
     cal_ppm <-  round(cal_ppm, digits = 2)
-    RT_diff <- with(DB.list, abs(My.RT - rt))
+    RT_diff <- with(DB.list, abs(My.RT - T.RT))
     RT_diff <- round(RT_diff, digits = 2)
     DB.list <- cbind(DB.list, Cal.ppm = cal_ppm, RT.dif = RT_diff)
-    ## add a new column, My.msms
+
+    ## add a new column, My.fragment
     ## rbind.data.frame does not work for the subsequent convertion of list tp DF, use rbind() here
     n.DB.list <- dim(DB.list)[1]
     DB.list <- cbind(DB.list, My.msms = rep(NA, n.DB.list))
@@ -101,8 +96,10 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE, R
     if (n_Result > 0 & frag == TRUE){
       for (j in 1:n_Result) {
         ## prepare the data
-        msms = as.numeric(strsplit(as.vector(Result[[i]][j, ]$msms.frgs), split = ";")[[1]])
-        msms_rt = rep(Result[[i]][j, ]$rt, length(msms))
+        msms = as.numeric(strsplit(as.vector(Result[[i]][j, ]$Fragment), split = ";")[[1]])
+        ## check if msms exist, if no, skip this iteration
+        if(is.na(msms) == TRUE) next
+        msms_rt = rep(Result[[i]][j, ]$T.RT, length(msms))
         T.frag <- cbind.data.frame(msms = msms, msms_rt = msms_rt)
         ms2 <- cbind.data.frame(ms2 = peak_ms22$mz, rt2 = peak_ms22$rt)
         ms2 <- round(ms2, digits = 4)
@@ -135,7 +132,7 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", RT.cor = TRUE, R
   iden_result <- cbind.data.frame(search_result, iden_ms1[, -c(1:6)])
   non_iden_ms1 <- peak_ms11[-iden_id, ]
   iden_result$My.RT <- round(iden_result$My.RT/60, 2) # convert RT to min
-  iden_result$rt <- round(iden_result$rt/60, 2)
+  iden_result$T.RT <- round(iden_result$T.RT/60, 2)
   iden_result$RT.dif <- round(iden_result$RT.dif/60, 2)
   iden_result <- iden_result[order(iden_result$My.RT, decreasing = FALSE),] # order according to RT
   row.names(iden_result) <- NULL
