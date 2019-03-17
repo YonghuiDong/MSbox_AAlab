@@ -65,6 +65,9 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   myrt = round(myrt, digits = 2)
 
   #(4) search in database
+  ## supress warnings
+  options(warn=-1)
+
   expand.grid.df <- function(...) Reduce(function(...) merge(..., by = NULL), list(...))
   Result <- vector("list", length(mymz))
 
@@ -95,10 +98,10 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
     n_Result <- dim(Result[[i]])[1]
     if (n_Result > 0 & frag == TRUE){
       for (j in 1:n_Result) {
+        ## check if msms exist, if no, skip this iteration
+        if(all(is.na(Result[[i]][j, ]$Fragment)) == TRUE) next
         ## prepare the data
         msms = as.numeric(strsplit(as.vector(Result[[i]][j, ]$Fragment), split = ";")[[1]])
-        ## check if msms exist, if no, skip this iteration
-        if(is.na(msms) == TRUE) next
         msms_rt = rep(Result[[i]][j, ]$T.RT, length(msms))
         T.frag <- cbind.data.frame(msms = msms, msms_rt = msms_rt)
         ms2 <- cbind.data.frame(ms2 = peak_ms22$mz, rt2 = peak_ms22$rt)

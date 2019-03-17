@@ -12,7 +12,7 @@ RT_correction(xset, ppm = 10, rt = 50, anchors = NULL,
 
 \item{ppm}{mass tolerance, default value = 10}
 
-\item{rt}{retention time search window, default value = 50}
+\item{rt}{retention time search window (in second), default value = 50 s.}
 
 \item{anchors}{lipidomics or metabolomics reference peaks}
 

@@ -32,7 +32,7 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   pre_anchors_lipid_pos = c("LysoPC 18:1(1)", "lysoPC 16:0", "lysoPC 16:0", "lysoPC 18:2(1)", "PC 34:3","PC 36:2","PC 36:3 (1)",
               "PC 36:4 (1)","PC 36:5","PC 36:6","LysoPC 18:0","lysoPC 18:3(1)","PE 34:2","PE 36:5","TAG 54:5",
               "GlcCer t18:1/h24:0", "TAG 52:0", "TAG 58:3")
-  if(toupper(use.DB) == "LIPIDOMICS" & mode == "+") {anchors <- pre_anchors_lipid_pos}
+  if(toupper(use.DB) == "LIPIDOMICS" & mode == "+" & is.null(anchors) == TRUE) {anchors <- pre_anchors_lipid_pos}
   if(toupper(use.DB) == "LIPIDOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Lipid_DB_pos)}
 
   ##(2.2) for lipidomics neg (no DB now)
@@ -43,7 +43,7 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
                                  "Sinapic acid", "Kaempferol hexose", "Dehydrotomatine II", "Dehydrotomatine III",
                                  "a-Tomatine (S)", "Tomatidine", "Naringenin hexose", "Rutin (S)", "Tomatidine isomer",
                                  "Tomato-UGA 3", "Coumaroyl diferuoyl spremidine")
-  if(toupper(use.DB) == "METABOLOMICS" & mode == "+") {anchors <- pre_anchors_metabolite_pos}
+  if(toupper(use.DB) == "METABOLOMICS" & mode == "+" & is.null(anchors) == TRUE) {anchors <- pre_anchors_metabolite_pos}
   if(toupper(use.DB) == "METABOLOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Metabolite_DB_pos)}
 
   ##(2.4) for metabolomics neg (not ready)
