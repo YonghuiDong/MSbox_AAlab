@@ -8,10 +8,10 @@
 #' @importFrom utils URLencode
 #' @export
 #' @examples
-#' formula('malic acid')
-#' formula(c('malic acid', 'citric acid', 'tartaric acid'))
+#' get_formula('malic acid')
+#' get_formula(c('malic acid', 'citric acid', 'tartaric acid'))
 
-formula <- function(chem, representation = 'formula', info = FALSE) {
+get_formula <- function(chem, representation = 'formula', info = FALSE) {
 
   ##(1): display representation parameters
   if(info == TRUE) {message('More molecular information can be obtained by setting the representation parameter to:
