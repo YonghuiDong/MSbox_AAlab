@@ -8,6 +8,7 @@
 #' @param use.DB which database is used for peak identification, choose between "Lipidomics" and "Metabolomics".
 #' @param mode ionization mode, positive "+" or negative "-".
 #' @importFrom stats lm prcomp predict sd
+#' @importFrom xcms peakTable
 #' @export
 #' @examples
 #'\dontrun{
