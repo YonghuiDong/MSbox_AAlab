@@ -9,6 +9,7 @@
 #' @param y PCA Y axis, defult is PC2
 #' @param exclude exclude some classes of samples
 #' @param size dot size
+#' @param interactive should interactive figure be plotted? default = TRUE. If you want to save the result in high resolution, use non interative plot.
 #' @param ... other parameters
 #' @importFrom graphics abline legend par plot title
 #' @importFrom xcms peakTable
@@ -21,7 +22,7 @@
 #'}
 
 mypca <- function(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1, y = 2,
-                 size = 1.5, exclude = NULL, ...) {
+                 size = 1.5, exclude = NULL, interactive = T, ...) {
   #(1) check input
   ## check object type
   if(class(xset) != "xcmsSet") {stop("the input object is not an xcmsSet object")}
@@ -83,5 +84,13 @@ mypca <- function(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1, 
   p <- autoplot(prcomp(B3, center = centering), D_new, colour = "Group",
                 size = size, x = x, y = y, ...) +
     theme_bw()
-  ggplotly(p)
+  p2 <- ggplotly(p)
+
+  ## choose to use interactive or non-interactive plot
+  if(isTRUE(interactive) == TRUE) {
+    return(p2)
+  } else {
+    return(p)
+  }
+
 }
