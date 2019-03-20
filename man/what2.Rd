@@ -6,7 +6,7 @@
 \usage{
 what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+",
   RT.cor = TRUE, RT.cor.method = "L", frag = T, ppm = 10,
-  rt = 25)
+  rt = 25, ms2.rm = T, subgroup = NULL)
 }
 \arguments{
 \item{xset}{xcms object}
@@ -26,6 +26,10 @@ what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+",
 \item{ppm}{mass tolerance, default value = 10}
 
 \item{rt}{retention time search window, default value = 25}
+
+\item{ms2.rm}{should remove MSMS data when it is included, default = TRUE}
+
+\item{subgroup}{subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.}
 }
 \description{
 metabolite/lipid identification using home database accoring to m/z and RT. MSMS fragments are also given.

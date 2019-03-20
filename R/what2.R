@@ -10,7 +10,10 @@
 #' @param frag should search fragment
 #' @param ppm mass tolerance, default value = 10
 #' @param rt retention time search window, default value = 25
+#' @param ms2.rm should remove MSMS data when it is included, default = TRUE
+#' @param subgroup subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.
 #' @importFrom xcms peakTable
+#' @importFrom CAMERA xsAnnotate groupFWHM findIsotopes getPeaklist
 #' @export
 #'@examples
 #'\dontrun{
@@ -18,8 +21,9 @@
 #'}
 
 what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.cor = TRUE,
-                   RT.cor.method = "L", frag = T, ppm = 10, rt = 25) {
+                   RT.cor.method = "L", frag = T, ppm = 10, rt = 25, ms2.rm = T, subgroup = NULL) {
 
+  cat("\n(1) Checking input parameters...");
   #(1) input check
   if(class(xset) != "xcmsSet") {stop("the input object is not an xcmsSet object")}
   if(!is.numeric(ppm)){stop("invalid calss of ppm threshold: not numeric")}
@@ -35,17 +39,29 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   if(toupper(use.DB) == "METABOLOMICS" & mode == "-") {DB <- as.data.frame(sysdata$Metabolite_DB_neg)}
   if(toupper(use.DB) == "LIPIDOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Lipid_DB_pos)}
 
-
   if(isTRUE(RT.cor) == TRUE) {
     if(dim(RT.DB)[1] != dim(DB)[1]) {stop("wrong RT correction DB, did you recalibrate your DB?")}
     if(toupper(RT.cor.method)  == "L") {DB$rt = RT.DB$rt_correct_l}
     if(toupper(RT.cor.method)  == "P") {DB$rt = RT.DB$rt_correct_p}
   }
 
+  cat("Passed");
+
 
   #(3) prepare the data, seperate MS1 and MS2
+  cat("\n(2) Deisotoping...");
   pheno_levels <- levels(xset@phenoData$class)
   peak <- peakTable(xset)
+
+  ##(3.1) deisotoping
+  an <- xsAnnotate(xset)
+  anG <- groupFWHM(an)
+  anI <- findIsotopes(an)
+  iso_peaklist <- getPeaklist(anI)
+  iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
+  peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
+
+  ##(3.2) prepare the data
   A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = t(A)
   class = row.names(xset@phenoData)
@@ -63,8 +79,21 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   mymz = round(mymz, digits = 4)
   myrt = peak_ms11$rt
   myrt = round(myrt, digits = 2)
+  cat("Done");
 
-  #(4) search in database
+  #(4) get fold change and p-values
+  cat("\n(3) Calculating fold change and performing pair-wise statistical test...");
+  data_summary <- mysummary(xset, ms2.rm, subgroup)
+
+   ## get the sample name which has the max intensity of each m/z. It is useful for further manual identification
+  sample_index <- as.matrix(apply(A, 1, which.max))
+  sample_name <- colnames(A)[sample_index]
+  data_summary <- cbind(Max_Sample = sample_name, data_summary)
+  cat("done");
+
+
+  #(5) search in database
+  cat("\n(4) Searching against database...");
   ## supress warnings
   options(warn=-1)
 
@@ -76,7 +105,7 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
     ##(4.1) for MS1
     width <- options()$width * 0.3
     cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mymz) * width), collapse = ''))
-    cat(paste0(round(i / length(mymz) * 100), '% completed'))
+    cat(paste0(round(i / length(mymz) * 100), '% Database searching completed...'))
     DB.list <- expand.grid.df(i, mymz[i], myrt[i], DB)
     colnames(DB.list)[c(1:3)] <- c("QueryID", "My.mz", "My.RT")
 
@@ -125,20 +154,26 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   }
 
   #(5) format the result
+  cat("\n(5) Formating the result...");
   search_result <- do.call(rbind.data.frame, Result)
+  search_result$rt = NULL
   ## remove My.msms column when no MS/MS search is performed
   if(frag == FALSE) {search_result$My.msms = NULL}
   iden_id <- search_result$QueryID
   ## select identified rows in MS1
-  iden_ms1 <- peak_ms11[iden_id, ]
+  iden_ms1 <- data_summary[iden_id, ]
+
   ## combine the search_result with identified MS1
-  iden_result <- cbind.data.frame(search_result, iden_ms1[, -c(1:6)])
-  non_iden_ms1 <- peak_ms11[-iden_id, ]
+  iden_result <- cbind.data.frame(search_result, iden_ms1)
+  non_iden_ms1 <- data_summary[-iden_id, ]
+  # add mz, RT infor
+  non_iden_ms1 <- cbind.data.frame(peak[-iden_id, c(1:(7 + length(pheno_levels)))], non_iden_ms1)
   iden_result$My.RT <- round(iden_result$My.RT/60, 2) # convert RT to min
   iden_result$T.RT <- round(iden_result$T.RT/60, 2)
   iden_result$RT.dif <- round(iden_result$RT.dif/60, 2)
   iden_result <- iden_result[order(iden_result$My.RT, decreasing = FALSE),] # order according to RT
   row.names(iden_result) <- NULL
-  final_result <- list(Identified = iden_result, Not_Identified = non_iden_ms1)
+  final_result <- list(Full_peak = peak, Identified = iden_result, Not_Identified = non_iden_ms1)
+  cat("done");
   return(final_result)
 }
