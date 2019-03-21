@@ -1,8 +1,10 @@
 #' @title Prefilter
 #' @description prefiltering isotopically labeled analytes according to the experiment design.
 #' @param xset xcms object.
-#' @param ms2.rm remove MSMS data when it is included, default = TRUE
-#' @param subgroup subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.
+#' @param ms2.rm should remove MSMS data when it is included, default = TRUE
+#' @param subgroup subset only specific groups for statistical test, default = NULL, which means statistics will be performed to all group pairs.
+#' @param scale_group select groups needs to be scaled up or down, accoding to sample dilution or concentration.
+#' @param scale_factor the scale factor, default = 1.
 #' @importFrom xcms peakTable
 #' @importFrom stats lm
 #' @importFrom stats aov
@@ -15,29 +17,31 @@
 #' my_summary <- mysummary(xset)
 #'}
 
-mysummary <- function(xset, ms2.rm = ms2.rm, subgroup = subgroup){
+mysummary <- function(xset, ms2.rm, subgroup, scale_group, scale_factor){
 
-  #(1) check input
-  ##(1.1) check xset phenoData
-  pheno_levels <- levels(xset@phenoData$class)
-  ##(1.2) check subsetgroup
-  if(is.null(subgroup) == FALSE & all(subgroup %in% pheno_levels) == FALSE)
-  {stop("selected subgroup(s) do not exist in your data")}
-
-  #(2) extract xcms information
+  #(1) extract xcms information
   peak <- peakTable(xset)
-  ##(2.1) deisotoping
+  pheno_levels <- levels(xset@phenoData$class)
+  ##(1.1) add scaling facors. e.g., some groups were diluted 10 times before analysis, so the intensity should be multiplied by 10
+  my_meta <- xset@phenoData
+  if (is.null(scale_group) == FALSE){
+    get_cnames <- row.names(my_meta)[my_meta$class %in% scale_group]
+    peak[, (colnames(peak) %in% get_cnames)] <- peak[, (colnames(peak) %in% get_cnames)] * scale_factor
+  }
+  ##(1.2) change colnames to ease futher data analysis
+  colnames(peak)[-c(1:(7 + length(pheno_levels)))] <- paste(my_meta$class, "_", row.names(my_meta), sep = "")
+  ##(1.3) deisotoping
   an <- xsAnnotate(xset)
   anG <- groupFWHM(an)
   anI <- findIsotopes(an)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
-  ##(2.2) prepare the data
+  ##(1.4) prepare the data
   A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = cbind.data.frame(t(A), Group = xset@phenoData$class)
 
-  #(3) remove MS2 if exist
+  #(2) remove MS2 if exist
   if (isTRUE(ms2.rm) == TRUE) {
     class = row.names(xset@phenoData)
     mslevels = sub(".*(\\d+{1}).*$", "\\1", class)
@@ -47,7 +51,7 @@ mysummary <- function(xset, ms2.rm = ms2.rm, subgroup = subgroup){
     B <- peak_ms1
   }
 
-  #(4) only select subgroups if subgroup is not NULL
+  #(3) only select subgroups if subgroup is not NULL
   if(is.null(subgroup) == TRUE) {
     peaklist_new = B
   } else {
@@ -56,13 +60,13 @@ mysummary <- function(xset, ms2.rm = ms2.rm, subgroup = subgroup){
     peaklist_new$Group <- factor(peaklist_new$Group)
   }
 
-  ##(5) calculating fold change
+  ##(4) calculating fold change
   fold <- fold(peaklist_new)
 
-  ##(6) statistical test
+  ##(5) statistical test
   stat <- getp(peaklist_new)
 
-  ##(7) combind result
+  ##(6) combind result
   my_summary <- cbind.data.frame(A, fold, stat)
   return(my_summary)
 }

@@ -4,14 +4,18 @@
 \alias{mysummary}
 \title{Prefilter}
 \usage{
-mysummary(xset, ms2.rm = ms2.rm, subgroup = subgroup)
+mysummary(xset, ms2.rm, subgroup, scale_group, scale_factor)
 }
 \arguments{
 \item{xset}{xcms object.}
 
-\item{ms2.rm}{remove MSMS data when it is included, default = TRUE}
+\item{ms2.rm}{should remove MSMS data when it is included, default = TRUE}
 
-\item{subgroup}{subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.}
+\item{subgroup}{subset only specific groups for statistical test, default = NULL, which means statistics will be performed to all group pairs.}
+
+\item{scale_group}{select groups needs to be scaled up or down, accoding to sample dilution or concentration.}
+
+\item{scale_factor}{the scale factor, default = 1.}
 }
 \value{
 a filtered peaklist
