@@ -5,7 +5,8 @@
 \title{fast PCA}
 \usage{
 mypca(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1,
-  y = 2, size = 1.5, exclude = NULL, interactive = T, ...)
+  y = 2, size = 1.5, exclude = NULL, scale_group = NULL,
+  scale_factor = 1, interactive = T, ...)
 }
 \arguments{
 \item{xset}{xcms object}
@@ -24,7 +25,12 @@ mypca(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1,
 
 \item{exclude}{exclude some classes of samples}
 
-\item{interactive}{should interactive figure be plotted? default = TRUE. If you want to save the result in high resolution, use non interative plot.}
+\item{scale_group}{select groups needs to be scaled.}
+
+\item{scale_factor}{the scale factor, default = 1.}
+
+\item{interactive}{should interactive figure be plotted? default = TRUE. If you want to save the result
+in high resolution, use non interative plot.}
 
 \item{...}{other parameters}
 }

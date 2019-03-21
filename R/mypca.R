@@ -9,7 +9,10 @@
 #' @param y PCA Y axis, defult is PC2
 #' @param exclude exclude some classes of samples
 #' @param size dot size
-#' @param interactive should interactive figure be plotted? default = TRUE. If you want to save the result in high resolution, use non interative plot.
+#' @param interactive should interactive figure be plotted? default = TRUE. If you want to save the result
+#' in high resolution, use non interative plot.
+#' @param scale_group select groups needs to be scaled.
+#' @param scale_factor the scale factor, default = 1.
 #' @param ... other parameters
 #' @importFrom graphics abline legend par plot title
 #' @importFrom xcms peakTable
@@ -22,7 +25,8 @@
 #'}
 
 mypca <- function(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1, y = 2,
-                 size = 1.5, exclude = NULL, interactive = T, ...) {
+                 size = 1.5, exclude = NULL, scale_group = NULL, scale_factor = 1,
+                 interactive = T, ...) {
   #(1) check input
   ## check object type
   if(class(xset) != "xcmsSet") {stop("the input object is not an xcmsSet object")}
@@ -34,7 +38,15 @@ mypca <- function(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1, 
 
   #(2) extract xcms information
   peak <- peakTable(xset)
-  ## add rownames
+
+  ##(2.1) add scaling facors. for instance, some samples were diluted 10 times, so the intensity should be multiplied by 10
+  my_meta <- xset@phenoData
+  if (is.null(scale_group) == FALSE){
+    get_cnames <- row.names(my_meta)[my_meta$class %in% scale_group]
+    peak[, (colnames(peak) %in% get_cnames)] <- peak[, (colnames(peak) %in% get_cnames)] * scale_factor
+  }
+
+  ##(2.1) add rownames
   mz = round(peak$mz, 3)
   rt = round(peak$rt/60, 2)
   mynames <- paste(mz, "_", rt, sep ="")
