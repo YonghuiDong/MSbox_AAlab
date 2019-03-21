@@ -11,7 +11,9 @@
 #' @param ppm mass tolerance, default value = 10
 #' @param rt retention time search window, default value = 25
 #' @param ms2.rm should remove MSMS data when it is included, default = TRUE
-#' @param subgroup subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.
+#' @param subgroup subset only specific groups for statistical test, default = NULL, which means statistics will be performed to all group pairs.
+#' @param scale_group select groups needs to be scaled up or down, accoding to sample dilution or concentration.
+#' @param scale_factor the scale factor, default = 1.
 #' @importFrom xcms peakTable
 #' @importFrom CAMERA xsAnnotate groupFWHM findIsotopes getPeaklist
 #' @export
@@ -21,10 +23,12 @@
 #'}
 
 what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.cor = TRUE,
-                   RT.cor.method = "L", frag = T, ppm = 10, rt = 25, ms2.rm = T, subgroup = NULL) {
+                   RT.cor.method = "L", frag = T, ppm = 10, rt = 25, ms2.rm = T, subgroup = NULL,
+                   scale_group = NULL, scale_factor = 1) {
 
   cat("\n(1) Checking input parameters...");
   #(1) input check
+  pheno_levels <- levels(xset@phenoData$class)
   if(class(xset) != "xcmsSet") {stop("the input object is not an xcmsSet object")}
   if(!is.numeric(ppm)){stop("invalid calss of ppm threshold: not numeric")}
   if(!is.numeric(rt)){stop("invalid calss of RT threshold: not numeric")}
@@ -33,6 +37,12 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   if(!(toupper(RT.cor.method) %in% c("L", "P")) == TRUE) {stop("wrong RT correction method")}
   if(!(toupper(use.DB) %in% c("METABOLOMICS", "LIPIDOMICS")) == TRUE) {stop("wrong DB selected")}
   if(!(mode %in% c("+", "-")) == TRUE) {stop("wrong ion mode, select '+' or '-'")}
+  if(is.null(subgroup) == FALSE & all(subgroup %in% pheno_levels) == FALSE)
+  {stop("selected subgroup(s) do not exist in your data")}
+  if(is.null(scale_group) == FALSE & all(scale_group %in% pheno_levels) == FALSE)
+  {stop("selected scale group(s) do not exist in your data")}
+  if(!is.numeric(scale_factor)){stop("invalid calss of scale factor: not numeric")}
+  if(scale_factor < 0){stop("scale factor should be positive")}
 
   #(2) select DB
   if(toupper(use.DB) == "METABOLOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Metabolite_DB_pos)}
@@ -47,13 +57,22 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
 
   cat("Passed");
 
-
   #(3) prepare the data, seperate MS1 and MS2
   cat("\n(2) Deisotoping...");
   pheno_levels <- levels(xset@phenoData$class)
   peak <- peakTable(xset)
 
-  ##(3.1) deisotoping
+  ##(3.1) add scaling facors. for instance, some samples were diluted 10 times, so the intensity should be multiplied by 10
+  my_meta <- xset@phenoData
+  if (is.null(scale_group) == FALSE){
+    get_cnames <- row.names(my_meta)[my_meta$class %in% scale_group]
+    peak[, (colnames(peak) %in% get_cnames)] <- peak[, (colnames(peak) %in% get_cnames)] * scale_factor
+  }
+
+  ##(3.2) change colnames to ease futher data analysis
+  colnames(peak)[-c(1:(7 + length(pheno_levels)))] <- paste(my_meta$class, "_", row.names(my_meta), sep = "")
+
+  ##(3.3) deisotoping
   an <- xsAnnotate(xset)
   anG <- groupFWHM(an)
   anI <- findIsotopes(an)
@@ -61,7 +80,7 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
 
-  ##(3.2) prepare the data
+  ##(3.4) prepare the data
   A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = t(A)
   class = row.names(xset@phenoData)
@@ -82,15 +101,15 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   cat("Done");
 
   #(4) get fold change and p-values
-  cat("\n(3) Calculating fold change and performing pair-wise statistical test...");
-  data_summary <- mysummary(xset, ms2.rm, subgroup)
 
+  cat("\n(3) Calculating fold change and performing pair-wise statistical test...");
+  data_summary <- mysummary(xset, ms2.rm = ms2.rm, subgroup = subgroup,
+                            scale_group = scale_group, scale_factor = scale_factor)
    ## get the sample name which has the max intensity of each m/z. It is useful for further manual identification
   sample_index <- as.matrix(apply(A, 1, which.max))
   sample_name <- colnames(A)[sample_index]
   data_summary <- cbind(Max_Sample = sample_name, data_summary)
   cat("done");
-
 
   #(5) search in database
   cat("\n(4) Searching against database...");
