@@ -6,7 +6,8 @@
 \usage{
 what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+",
   RT.cor = TRUE, RT.cor.method = "L", frag = T, ppm = 10,
-  rt = 25, ms2.rm = T, subgroup = NULL)
+  rt = 25, ms2.rm = T, subgroup = NULL, scale_group = NULL,
+  scale_factor = 1)
 }
 \arguments{
 \item{xset}{xcms object}
@@ -29,7 +30,11 @@ what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+",
 
 \item{ms2.rm}{should remove MSMS data when it is included, default = TRUE}
 
-\item{subgroup}{subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.}
+\item{subgroup}{subset only specific groups for statistical test, default = NULL, which means statistics will be performed to all group pairs.}
+
+\item{scale_group}{select groups needs to be scaled up or down, accoding to sample dilution or concentration.}
+
+\item{scale_factor}{the scale factor, default = 1.}
 }
 \description{
 metabolite/lipid identification using home database accoring to m/z and RT. MSMS fragments are also given.
