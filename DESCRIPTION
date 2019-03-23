@@ -15,8 +15,8 @@ Imports:
  xml2,
  xcms,
  CAMERA,
- ggfortify,
  stats,
+ ggfortify,
  ggplot2,
  plotly
 License: GPL-2
