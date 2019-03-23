@@ -120,7 +120,6 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   Result <- vector("list", length(mymz))
 
   for (i in 1:length(mymz)) {
-
     ##(4.1) for MS1
     width <- options()$width * 0.3
     cat(paste0(rep(c(intToUtf8(0x2698), "="), i / length(mymz) * width), collapse = ''))
