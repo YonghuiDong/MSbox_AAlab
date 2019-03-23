@@ -1,5 +1,5 @@
 #' @title fast PCA
-#' @description perform PCA directing from xcms object
+#' @description perform PCA from xcms object
 #' @author Yonghui Dong
 #' @param xset xcms object
 #' @param centering centering, default = TRUE
@@ -14,10 +14,11 @@
 #' @param scale_group select groups needs to be scaled.
 #' @param scale_factor the scale factor, default = 1.
 #' @param ... other parameters
+#' @import ggplot2
+#' @import ggfortify
 #' @importFrom graphics abline legend par plot title
 #' @importFrom xcms peakTable
 #' @importFrom plotly ggplotly
-#' @importFrom ggplot2 theme_bw autoplot
 #' @export
 #'@examples
 #'\dontrun{

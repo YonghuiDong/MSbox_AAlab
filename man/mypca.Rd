@@ -35,7 +35,7 @@ in high resolution, use non interative plot.}
 \item{...}{other parameters}
 }
 \description{
-perform PCA directing from xcms object
+perform PCA from xcms object
 }
 \examples{
 \dontrun{
