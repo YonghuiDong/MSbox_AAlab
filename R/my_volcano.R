@@ -7,7 +7,7 @@
 #' @param p select p value, default = 0.05
 #' @param show_plot volcano plot should be plotted according to "iden", identified compounds or "non_iden", non identified compounds. default = "iden"
 #' @param interactive should interactive plot be shown? default = TRUE
-#' @importFrom ggplot2 ggplot geom_point geom_text scale_color_manual theme_bw geom_vline geom_hline  ggtitle xlab ylab labs
+#' @import ggplot2
 #' @importFrom plotly ggplotly
 #' @export
 #'@examples
