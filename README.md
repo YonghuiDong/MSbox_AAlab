@@ -29,8 +29,8 @@ E_iso('carBon') # element full name, case insensitive
 
 examples:
 ```r
-formula('malic acid')
-formula(c('malic acid', 'citric acid', 'tartaric acid'))
+get_formula('malic acid')
+get_formula(c('malic acid', 'citric acid', 'tartaric acid'))
 ```
 
 3. Calculate monoisitopic mass
