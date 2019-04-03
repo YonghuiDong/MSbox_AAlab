@@ -15,7 +15,7 @@
 #' @param scale_group select groups needs to be scaled up or down, accoding to sample dilution or concentration.
 #' @param scale_factor the scale factor, default = 1.
 #' @importFrom xcms peakTable
-#' @importFrom CAMERA xsAnnotate groupFWHM findIsotopes getPeaklist
+#' @importFrom CAMERA annotate getPeaklist
 #' @export
 #'@examples
 #'\dontrun{
@@ -73,7 +73,7 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   colnames(peak)[-c(1:(7 + length(pheno_levels)))] <- paste(my_meta$class, "_", row.names(my_meta), sep = "")
 
   ##(3.3) deisotoping
-  anI = groupCorr(xset, calcIso = TRUE, calcCiS = TRUE, cor_eic_th = 0.9)
+  anI <- annotate(xset, ppm=10, multiplier=2, quick=FALSE, cor_eic_th=0.9, calcCiS=TRUE, calcIso=TRUE)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
