@@ -6,16 +6,14 @@
 #' @param FC select fold change values, default = 2
 #' @param p select p value, default = 0.05
 #' @param show_plot volcano plot should be plotted according to "iden", identified compounds or "non_iden", non identified compounds. default = "iden"
-#' @param interactive should interactive plot be shown? default = TRUE
-#' @import ggplot2
-#' @importFrom plotly ggplotly
+#' @importFrom plotly plot_ly layout add_segments %>%
 #' @export
 #'@examples
 #'\dontrun{
 #'myvolcano(result, compare_group = c("WT", "JA"))
 #'}
 
-myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden", interactive = TRUE) {
+myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden") {
 
   #(1)check input
   if(!is.numeric(FC)){stop("invalid calss of fold change: not numeric")}
@@ -30,7 +28,6 @@ myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden
   P_id2 <- paste("P_", compare_group[2], "_VS_", compare_group[1], sep = "")
 
   #(3) plot
-
   if(toupper(show_plot) == "IDEN") {
     ##3.1 for identified result
     iden <- result$Identified
@@ -43,7 +40,7 @@ myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden
     ## prepare data frame for plot
     F_iden <- iden[, F_id]
     P_iden <- iden[, P_id]
-    new_iden <- cbind.data.frame(Compoud_QueryID = iden$QueryID,
+    new_iden <- cbind.data.frame(Compoud_QueryID = paste(iden$My.mz, "_", iden$My.RT, "_", iden$Compound, sep = ""),
                                  Fold_change = log2(F_iden),
                                  p.value = -log10(P_iden))
 
@@ -76,18 +73,27 @@ myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden
     }
 
     ##plot
-    myplot <- ggplot(data = new_iden, aes(x = Fold_change, y = p.value, label = Compoud_QueryID, col = my_cor)) +
-      geom_point(alpha = 1, size = 1) +
-      geom_text(hjust=0, vjust=0, alpha = 1) +
-      scale_color_manual(values=c("steelblue1", "Tomato", "springgreen3", "Grey")) +
-      theme_bw() +
-      geom_vline(xintercept = log2(FC), col = "black", linetype = "dotted", size = 0.6) +
-      geom_vline(xintercept = -log2(FC), col = "black", linetype = "dotted", size = 0.7) +
-      geom_hline(yintercept = -log10(p), col = "black", linetype = "dotted", size = 0.6) +
-      ggtitle("Identified compound") +
-      xlab("Log(2) fold change") +
-      ylab("-Log(10) p-value") +
-      labs(color = "")
+    pal <- c("steelblue1", "Tomato", "springgreen3", "Grey")
+    myplot <- plot_ly(new_iden, x = ~ Fold_change, y = ~ p.value, type = 'scatter', mode = 'markers',
+                      color = ~ my_cor, colors = pal,
+                      hoverinfo = 'text',
+                      text = ~ paste('</br> ID: ', Compoud_QueryID,
+                                     '</br> FC: ', formatC(2^Fold_change, format = "e", digits = 2),
+                                     '</br> p.value: ', formatC(10^(-p.value), format = "e", digits = 2))
+    )
+
+    final = myplot %>%
+      layout(xaxis = list(zeroline = F,  title = "Log2(FC)"),
+             yaxis = list(zeroline = F,  title = "-Log10(p.value)")) %>%
+      add_segments(x = log2(FC), xend = log2(FC),
+                   y = min(new_iden$p.value), yend = max(new_iden$p.value),
+                   line = list(dash = "dash", color = "black"), showlegend = FALSE) %>%
+      add_segments(x = -log2(FC), xend = -log2(FC),
+                   y = min(new_iden$p.value), yend = max(new_iden$p.value),
+                   line = list(dash = "dash", color = "black"), showlegend = FALSE) %>%
+      add_segments(x = min(new_iden$Fold_change), xend = max(new_iden$Fold_change),
+                   y = -log10(p), yend = -log10(p),
+                   line = list(dash = "dash", color = "black"), showlegend = FALSE)
   }
 
   if(toupper(show_plot) =="NON_IDEN") {
@@ -102,7 +108,7 @@ myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden
     ## prepare the data frame
     F_niden <- non_iden[, F_id]
     P_niden <- non_iden[, P_id]
-    new_niden <- cbind.data.frame(Compoud_QueryID = row.names(non_iden),
+    new_niden <- cbind.data.frame(Compoud_QueryID = paste(round(non_iden$mz, 4), "_", round(non_iden$rt, 2), sep = ""),
                                   Fold_change = log2(F_niden),
                                   p.value = -log10(P_niden))
     ## sometimes there are inf, NAN values in FC and p-value, so i replace these values with max(FC) and 0 for FC and p, respectively
@@ -128,25 +134,32 @@ myvolcano <- function(result, compare_group, FC = 2, p = 0.05, show_plot = "iden
     }
 
     ## plot
-    myplot <- ggplot(data = new_niden, aes(x = Fold_change, y = p.value, label = Compoud_QueryID, col = my_cor)) +
-      geom_point(alpha = 1, size = 1) +
-      geom_text(hjust=0, vjust=0, alpha = 1) +
-      scale_color_manual(values=c("steelblue1", "Tomato", "springgreen3", "Grey")) +
-      theme_bw() +
-      geom_vline(xintercept = log2(FC), col = "black", linetype = "dotted", size = 0.6) +
-      geom_vline(xintercept = -log2(FC), col = "black", linetype = "dotted", size = 0.7) +
-      geom_hline(yintercept = -log10(p), col = "black", linetype = "dotted", size = 0.6) +
-      ggtitle("Not identified compound") +
-      xlab("Log(2) fold change") +
-      ylab("-Log(10) p-value") +
-      labs(color = "")
+    pal <- c("steelblue1", "Tomato", "springgreen3", "Grey")
+    myplot <- plot_ly(new_niden, x = ~ Fold_change, y = ~ p.value, type = 'scatter', mode = 'markers',
+                      color = ~ my_cor, colors = pal,
+                      hoverinfo = 'text',
+                      text = ~ paste('</br> ID: ', Compoud_QueryID,
+                                     '</br> FC: ', formatC(2^Fold_change, format = "e", digits = 2),
+                                     '</br> p.value: ', formatC(10^(-p.value), format = "e", digits = 2))
+    )
+
+    formatC(2^Fold_change, format = "e", digits = 2)
+
+    final = myplot %>%
+      layout(xaxis = list(zeroline = F,  title = "Log2(FC)"),
+             yaxis = list(zeroline = F,  title = "-Log10(p.value)")) %>%
+      add_segments(x = log2(FC), xend = log2(FC),
+                   y = min(new_niden$p.value), yend = max(new_niden$p.value),
+                   line = list(dash = "dash", color = "black"), showlegend = FALSE) %>%
+      add_segments(x = -log2(FC), xend = -log2(FC),
+                   y = min(new_niden$p.value), yend = max(new_niden$p.value),
+                   line = list(dash = "dash", color = "black"), showlegend = FALSE) %>%
+      add_segments(x = min(new_niden$Fold_change), xend = max(new_niden$Fold_change),
+                   y = -log10(p), yend = -log10(p),
+                   line = list(dash = "dash", color = "black"), showlegend = FALSE)
   }
 
 
   #(4) final plots
-  if(interactive == TRUE) {
-    return(ggplotly(myplot))
-  } else {
-    return(myplot)
-  }
+  final
 }
