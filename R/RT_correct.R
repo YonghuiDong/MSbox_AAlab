@@ -9,6 +9,7 @@
 #' @param mode ionization mode, positive "+" or negative "-".
 #' @importFrom stats lm prcomp predict sd
 #' @importFrom xcms peakTable
+#' @importFrom CAMERA annotate getPeaklist
 #' @export
 #' @examples
 #'\dontrun{
@@ -38,7 +39,7 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
 
   ##(2.2) for lipidomics neg (no DB now)
 
-  ##(2.3) for metabolomics pos
+  ##(2.3) for metabolomics pos (anchors need to be optimized, not ready)
   pre_anchors_metabolite_pos = c("Tyrosine (S)", "Phenylalanine (S)", "Caffeoylputrescine", "Tryptophan (S)",
                                  "Coumaric acid hexose", "Quercetin-dihexose", "p-Coumaric acid", "Ferulic acid",
                                  "Sinapic acid", "Kaempferol hexose", "Dehydrotomatine II", "Dehydrotomatine III",
@@ -47,8 +48,26 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   if(toupper(use.DB) == "METABOLOMICS" & mode == "+" & is.null(anchors) == TRUE) {anchors <- pre_anchors_metabolite_pos}
   if(toupper(use.DB) == "METABOLOMICS" & mode == "+") {DB <- as.data.frame(sysdata$Metabolite_DB_pos)}
 
-  ##(2.4) for metabolomics neg (not ready)
+  ##(2.4) for metabolomics neg (anchors need to be optimized, not ready)
+  pre_anchors_metabolite_neg = c("Malic acid Isomer 1", "Tyrosine (S)","p-Coumaric acid (S)", "Galloyl quinic acid",
+                                 "Phenylalanine (S)", "Di-hydroxybenzoic acid-Hexose", "Phenylalanine derivative",
+                                 "Neochlorogenic acid", "Caffeic acid-hexose Isomer 1", "Caffeic acid", "Tryptophan (S)",
+                                 "Kaempferol 3-O-triglucoside-7-O-glucoside", "procyanidin_dimer", "Chlorogenic acid",
+                                 "Quercetin-dihexose-pentose-deoxyhexose", "Quercetin-3-O-(caffeoyl) trihexose",
+                                 "1-O-Caffeoylquinic acid", "Coumaric acid-Hexose Isomer 3", "Ferulic acid Isomer 1",
+                                 "Quercetin hexose-hexose", "Quercetin-dihexose-deoxyhexose", "Rutin",
+                                 "Dehydrotomatine (S)", "Tomatine (S)", "Labdanolic acid", "Grandiflorenic acid", "Stearolic acid",
+                                 "Colladonin", "Hocogenin", "Malic acid Isomer 2", "p-Coumaric acid (S)", "Feruloyl quinic acid",
+                                 "Quercetin hexose-hexose", "Quercetin-Hex-deoxyHex", "quercetin 3-caffeoyl dihexose", "Kaempferol glucuronide hexose",
+                                 "Ferulic acid", "Kaempferol dihexose", "Kaempferol-hexose-deoxyhexose Isomer 1",
+                                 "Sinapic acid (S)", "quercetin-3-O-feruloyl dihexose Isomer 2", "Esculeoside B",
+                                 "Coumaroyl malate Isomer 1", "kaempferol-3-O-caffeoyl sophorotrioside", "Quercetin glucuronide",
+                                 "Malic acid Isomer 3", "Kaempferol hexose", "Quercetin deoxyhexose", "isorhamnetin hexose",
+                                 "Naringenin hexose", "Isorhamnetin hexose", "Kaempferol deoxyhexose", "Quercetin deoxyhexose",
+                                 "Tomato-UGA 15", "feruloylsinapoylglucose", "Naringenin (S)")
 
+  if(toupper(use.DB) == "METABOLOMICS" & mode == "-" & is.null(anchors) == TRUE) {anchors <- pre_anchors_metabolite_neg}
+  if(toupper(use.DB) == "METABOLOMICS" & mode == "-") {DB <- as.data.frame(sysdata$Metabolite_DB_neg)}
 
 
   #(3) pre-annotation for RT correction
@@ -56,6 +75,13 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   ##(3.1) prepare the data, seperate MS1 and MS2
   pheno_levels <- levels(xset@phenoData$class)
   peak <- peakTable(xset)
+
+  ##(3.2) deisotoping
+  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = FALSE, cor_eic_th = 0.9, calcCiS = TRUE, calcIso = TRUE)
+  iso_peaklist <- getPeaklist(anI)
+  iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
+  peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
+
   A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = t(A)
   class = row.names(xset@phenoData)
@@ -108,12 +134,11 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   #(4) format the result
   my_iden <- do.call(rbind.data.frame, Result)
 
-
   ##(5) calibration
-  my.anchors = my_iden[my_iden$Compound %in% anchors,]$My.RT
-  my.compound = my_iden[my_iden$Compound %in% anchors,]$Compound
+  my.anchors <- my_iden[my_iden$Compound %in% anchors,]$My.RT
+  my.compound <- my_iden[my_iden$Compound %in% anchors,]$Compound
   if(length(my.anchors) == 0) {stop("No anchors were found!")}
-  anchors.library = my_iden[my_iden$Compound %in% anchors,]$T.RT
+  anchors.library <- my_iden[my_iden$Compound %in% anchors,]$T.RT
   ## provide anchor information
   anchor.data <- unique(cbind.data.frame(compound = my.compound, RT = round(my.anchors/60, 2)))
   anchor.data <- anchor.data[order(anchor.data$RT, decreasing = F), ]
