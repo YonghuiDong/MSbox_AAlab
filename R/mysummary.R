@@ -30,13 +30,13 @@ mysummary <- function(xset, ms2.rm, subgroup, scale_group, scale_factor){
   }
   ##(1.2) change colnames to ease futher data analysis
   colnames(peak)[-c(1:(7 + length(pheno_levels)))] <- paste(my_meta$class, "_", row.names(my_meta), sep = "")
+
   ##(1.3) deisotoping
-  an <- xsAnnotate(xset)
-  anG <- groupFWHM(an)
-  anI <- findIsotopes(an)
+  anI = groupCorr(xset, calcIso = TRUE, calcCiS = TRUE, cor_eic_th = 0.9)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
+
   ##(1.4) prepare the data
   A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = cbind.data.frame(t(A), Group = xset@phenoData$class)
