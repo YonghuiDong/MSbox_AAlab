@@ -14,7 +14,7 @@
 #' @param scale_group select groups needs to be scaled.
 #' @param scale_factor the scale factor, default = 1.
 #' @param ... other parameters
-#' @import ggplot2
+#' @importFrom ggplot2 autoplot theme_bw
 #' @import ggfortify
 #' @importFrom graphics abline legend par plot title
 #' @importFrom xcms peakTable
