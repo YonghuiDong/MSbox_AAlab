@@ -5,7 +5,7 @@
 \title{volcano plot}
 \usage{
 myvolcano(result, compare_group, FC = 2, p = 0.05,
-  show_plot = "iden", interactive = TRUE)
+  show_plot = "iden")
 }
 \arguments{
 \item{result}{result from what2() function}
@@ -17,8 +17,6 @@ myvolcano(result, compare_group, FC = 2, p = 0.05,
 \item{p}{select p value, default = 0.05}
 
 \item{show_plot}{volcano plot should be plotted according to "iden", identified compounds or "non_iden", non identified compounds. default = "iden"}
-
-\item{interactive}{should interactive plot be shown? default = TRUE}
 }
 \description{
 volcano plot.
