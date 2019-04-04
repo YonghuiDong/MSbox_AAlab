@@ -33,7 +33,7 @@ mysummary <- function(xset, ms2.rm, subgroup, scale_group, scale_factor){
   colnames(peak)[-c(1:(7 + length(pheno_levels)))] <- paste(my_meta$class, "_", row.names(my_meta), sep = "")
 
   ##(1.3) deisotoping
-  anI <- annotate(xset, ppm=10, multiplier=2, quick=FALSE, cor_eic_th=0.9, calcCiS=TRUE, calcIso=TRUE)
+  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = TRUE, calcCiS = TRUE, calcIso = TRUE)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
