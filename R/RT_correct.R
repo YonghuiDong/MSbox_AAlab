@@ -77,7 +77,7 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   peak <- peakTable(xset)
 
   ##(3.2) deisotoping
-  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = FALSE, cor_eic_th = 0.9, calcCiS = TRUE, calcIso = TRUE)
+  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = TRUE, calcCiS = TRUE, calcIso = TRUE)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
