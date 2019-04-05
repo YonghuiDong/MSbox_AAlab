@@ -7,7 +7,7 @@
 #' @param anchors lipidomics or metabolomics reference peaks
 #' @param use.DB which database is used for peak identification, choose between "Lipidomics" and "Metabolomics".
 #' @param mode ionization mode, positive "+" or negative "-".
-#' @importFrom stats lm prcomp predict sd
+#' @importFrom stats lm prcomp predict sd median
 #' @importFrom xcms peakTable
 #' @importFrom CAMERA annotate getPeaklist
 #' @export
