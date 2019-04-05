@@ -73,7 +73,7 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   colnames(peak)[-c(1:(7 + length(pheno_levels)))] <- paste(my_meta$class, "_", row.names(my_meta), sep = "")
 
   ##(3.3) deisotoping
-  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = TRUE, calcCiS = TRUE, calcIso = TRUE)
+  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = TRUE, calcIso = TRUE)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
@@ -103,7 +103,10 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   cat("\n(3) Calculating fold change and performing pair-wise statistical test...");
   data_summary <- mysummary(xset, ms2.rm = ms2.rm, subgroup = subgroup,
                             scale_group = scale_group, scale_factor = scale_factor)
-   ## get the sample name which has the max intensity of each m/z. It is useful for further manual identification
+  ## deisotoping
+  data_summary <- data_summary[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
+
+  ## get the sample name which has the max intensity of each m/z. It is useful for further manual identification
   sample_index <- as.matrix(apply(A, 1, which.max))
   sample_name <- colnames(A)[sample_index]
   data_summary <- cbind(Max_Sample = sample_name, data_summary)
