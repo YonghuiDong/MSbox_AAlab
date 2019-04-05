@@ -77,7 +77,7 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   peak <- peakTable(xset)
 
   ##(3.2) deisotoping
-  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = TRUE, calcCiS = TRUE, calcIso = TRUE)
+  anI <- annotate(xset, ppm = 10, quick = TRUE, calcIso = TRUE)
   iso_peaklist <- getPeaklist(anI)
   iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
   peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
@@ -138,9 +138,14 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   my.anchors <- my_iden[my_iden$Compound %in% anchors,]$My.RT
   my.compound <- my_iden[my_iden$Compound %in% anchors,]$Compound
   if(length(my.anchors) == 0) {stop("No anchors were found!")}
-  anchors.library <- my_iden[my_iden$Compound %in% anchors,]$T.RT
+
+  ## sometimes more than 1 compound were annotated as the same compound, then their median rt are used for RT correction
+  my.anchors2 <- sapply(unique(my.compound), function(x) median(my.anchors[my.compound == x]))
+  anchors.library <- unique(my_iden[my_iden$Compound %in% anchors,]$T.RT)
+
+
   ## provide anchor information
-  anchor.data <- unique(cbind.data.frame(compound = my.compound, RT = round(my.anchors/60, 2)))
+  anchor.data <- cbind.data.frame(compound = unique(my.compound), RT = round(my.anchors2/60, 2))
   anchor.data <- anchor.data[order(anchor.data$RT, decreasing = F), ]
   unique.anchors = dim(anchor.data)[1]
   RT.range <- round(range(anchor.data$RT), 2)
@@ -154,9 +159,8 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
 
 
   ## linear may be safer than polynomial (overfitting problem)
-
-  model = lm(my.anchors ~ anchors.library)
-  modelp <- lm(my.anchors ~ poly(anchors.library, 3))
+  model = lm(my.anchors2 ~ anchors.library)
+  modelp <- lm(my.anchors2 ~ poly(anchors.library, 3))
 
   adj.R = round(summary(model)$adj.r.squared, 3)
   adj.R_p = round(summary(modelp)$adj.r.squared, 3)
@@ -168,12 +172,12 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
 
   par(mfrow=c(2,1))
   plot(x = DB$T.RT,  y = predicted.rt$fit, col = "red", pch = 16, xlab = "Original RT (s)", ylab = "Predicted RT (s)")
-  abline(lm(my.anchors ~ anchors.library), col = "blue", lwd=3)
+  abline(lm(my.anchors2 ~ anchors.library), col = "blue", lwd=3)
   legend("topleft", paste("adj.R^2 = ", adj.R, sep =""), bty = "n")
   title("Linear Regression")
 
   plot(x = DB$T.RT,  y = predicted.rt_p$fit, col = "red", pch = 16, xlab = "Original RT (s)", ylab = "Predicted RT (s)")
-  abline(lm(my.anchors ~ anchors.library), col = "blue", lwd=3)
+  abline(lm(my.anchors2 ~ anchors.library), col = "blue", lwd=3)
   legend("topleft", paste("adj.R^2 = ", adj.R_p, sep =""), bty = "n")
   title("Polynomia Regression, degree = 3")
 
@@ -185,9 +189,7 @@ RT_correction <- function(xset, ppm = 10, rt = 50, anchors = NULL, use.DB = "LIP
   cat(sep="\n\n")
   cat("Attention:\n")
   cat(sep="\n\n")
-  cat("(1) For perfect RT correction, you would have Predicted RT = Original RT.\n")
-  cat("(2) If there is a strong distortion, please carefully re-select your anchors, and re-do RT correction. \n")
-  cat("(3) Linear and polynomial regresstion are used for RT correction. Select the prefered method for metabolite identification. The default one is linear regression. \n")
+  cat("Linear and polynomial regresstion are used for RT correction. Select the prefered method for metabolite identification. The default one is linear regression. \n")
   return(DB)
   }
 
