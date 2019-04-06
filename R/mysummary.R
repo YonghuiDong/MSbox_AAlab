@@ -62,7 +62,7 @@ mysummary <- function(xset, ms2.rm, subgroup, scale_group, scale_factor){
   stat <- getp(peaklist_new)
 
   ##(6) combind result
-  my_summary <- cbind.data.frame(A, fold, stat)
+  my_summary <- cbind.data.frame(fold, stat)
   return(my_summary)
 }
 
