@@ -51,11 +51,11 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
 
   if(isTRUE(RT.cor) == TRUE) {
     if(dim(RT.DB)[1] != dim(DB)[1]) {stop("wrong RT correction DB, did you recalibrate your DB?")}
-    if(toupper(RT.cor.method)  == "L") {DB$rt = RT.DB$rt_correct_l}
-    if(toupper(RT.cor.method)  == "P") {DB$rt = RT.DB$rt_correct_p}
+    if(toupper(RT.cor.method)  == "L") {DB$T.RT = RT.DB$rt_correct_l}
+    if(toupper(RT.cor.method)  == "P") {DB$T.RT = RT.DB$rt_correct_p}
   }
 
-  cat("Passed");
+  cat("passed");
 
   #(3) prepare the data, seperate MS1 and MS2
   cat("\n(2) Deisotoping...");
@@ -107,9 +107,12 @@ what2 <- function (xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+", RT.c
   data_summary <- data_summary[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
 
   ## get the sample name which has the max intensity of each m/z. It is useful for further manual identification
-  sample_index <- as.matrix(apply(A, 1, which.max))
-  sample_name <- colnames(A)[sample_index]
-  data_summary <- cbind(Max_Sample = sample_name, data_summary)
+  ## only from ms1
+  tmp1 <- peak_ms11[, c(-1:-(7 + length(pheno_levels)))]
+  sample_index <- as.matrix(apply(tmp1, 1, which.max))
+  sample_index <- as.vector(sample_index, mode = "numeric")
+  sample_name <- colnames(tmp1)[sample_index]
+  data_summary <- cbind(Max_Sample = sample_name, tmp1, data_summary)
   cat("done");
 
   #(5) search in database
