@@ -1,4 +1,4 @@
-#' @title Get compound formula and structure
+#' @title Get the compound information
 #' @description get compound formula and structure from https://cactus.nci.nih.gov/chemical/structure
 #' @author Yonghui Dong
 #' @param chem, chemical name of the compound
@@ -8,10 +8,10 @@
 #' @importFrom utils URLencode
 #' @export
 #' @examples
-#' get_formula('malic acid')
-#' get_formula(c('malic acid', 'citric acid', 'tartaric acid'))
+#' describe('malic acid', "formula")
+#' describe(c('malic acid', 'citric acid', 'tartaric acid'), "smiles")
 
-get_formula <- function(chem, representation = 'formula', info = FALSE) {
+describe <- function(chem, representation = 'formula', info = FALSE) {
 
   ##(1): display representation parameters
   if(info == TRUE) {message('More molecular information can be obtained by setting the representation parameter to:
@@ -34,6 +34,8 @@ get_formula <- function(chem, representation = 'formula', info = FALSE) {
 (14) heavy_atom_count,
 (15) deprotonable_group_count,
 (16) protonable_group_count,
+(17) smiles
+(18) stdinchikey : Standard InchiKey
 
 [===========================================================================================]')}
 
@@ -44,6 +46,7 @@ get_formula <- function(chem, representation = 'formula', info = FALSE) {
   url_read <- vector("list", length = length(chem))
   url_result <- vector("list", length = length(chem))
   url_result2 <- vector("list", length = length(chem))
+  missing <- rep(NA, length(chem)) # count the unassigned number
 
   for (i in 1:length(chem)) {
     ##(2.1) query compound formula
@@ -51,12 +54,25 @@ get_formula <- function(chem, representation = 'formula', info = FALSE) {
     url_read[[i]] <- read_xml(url[[i]])
     url_result[[i]] <- xml_text(xml_find_all(url_read[[i]], '//item'))
     ## check compound name
-    if (identical(url_result[[i]], character(0)) == TRUE) {stop("Warning: compound name not found")}
-    url_result2[[i]] <- url_result[[i]][[1]]
+    if (identical(url_result[[i]], character(0)) == TRUE) {
+      url_result2[[i]] = "unknown"
+      missing[i] = i # record the missing index
+      } else {
+        url_result2[[i]] <- url_result[[i]][[1]]
+      }
   }
 
   ## display compound other information
   names(url_result2) <- chem
-  message('The ', representation, ' and compound structure(s) are as following:' )
+  missing2 <- missing[!is.na(missing)]
+  message('The ', representation, ' are as following:' )
+  if (length(missing2) > 0) {
+    message("Attention: ", representation, " of ", length(missing2), " compound(s) ", "are not assigned")
+  }
   noquote(unlist(url_result2))
 }
+
+
+
+
+
