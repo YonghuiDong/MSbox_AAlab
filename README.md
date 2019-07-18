@@ -27,7 +27,7 @@ E_iso('carBon') # element full name, case insensitive
 
 2. Get extra molecular information based on compound name
 
-examples in MSbox package from Github, if the queried information is not found for a compounds, it will assign "unknown" to that compound information:
+If the queried information is not found for a compounds, it will assign "unknown" to that compound information:
 ```r
 describe('malic acid') # get formula by default
 describe(c('malic acid', 'citric acid', 'tartaric acid'), representation = "smiles") # get smiles
