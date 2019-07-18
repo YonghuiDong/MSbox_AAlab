@@ -9,9 +9,6 @@ Common mass spectrometry tools for minimalist MS users.
 # Installation 
 
 ```r
-## development version
-devtools::install_github("YonghuiDong/MSbox")
-
 ## stable version
 install.packages('MSbox')
 ```
@@ -30,15 +27,7 @@ E_iso('carBon') # element full name, case insensitive
 
 2. Get extra molecular information based on compound name
 
-**Attention** : The function and output are a bit different between MSbox package downloaded from CRAN and Github
-
-examples in MSbox package from CRAN, it the queried information is not found for **any** compound, it will stop and pops up an error:
-```r
-get_formula('malic acid')
-get_formula(c('malic acid', 'citric acid', 'tartaric acid'))
-```
-
-examples in MSbox package from Github, it the queried information is not found for a compounds, it will assign "unknown" to that compound:
+examples in MSbox package from Github, if the queried information is not found for a compounds, it will assign "unknown" to that compound information:
 ```r
 describe('malic acid') # get formula by default
 describe(c('malic acid', 'citric acid', 'tartaric acid'), representation = "smiles") # get smiles
