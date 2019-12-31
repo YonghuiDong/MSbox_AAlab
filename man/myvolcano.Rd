@@ -4,8 +4,7 @@
 \alias{myvolcano}
 \title{volcano plot}
 \usage{
-myvolcano(result, compare_group, FC = 2, p = 0.05,
-  show_plot = "iden")
+myvolcano(result, compare_group, FC = 2, p = 0.05, show_plot = "iden")
 }
 \arguments{
 \item{result}{result from what2() function}

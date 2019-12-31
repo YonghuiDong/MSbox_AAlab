@@ -4,9 +4,20 @@
 \alias{mypca}
 \title{fast PCA}
 \usage{
-mypca(xset, centering = T, scaling = "none", ms2.rm = FALSE, x = 1,
-  y = 2, size = 1.5, exclude = NULL, scale_group = NULL,
-  scale_factor = 1, interactive = T, ...)
+mypca(
+  xset,
+  centering = T,
+  scaling = "none",
+  ms2.rm = FALSE,
+  x = 1,
+  y = 2,
+  size = 1.5,
+  exclude = NULL,
+  scale_group = NULL,
+  scale_factor = 1,
+  interactive = T,
+  ...
+)
 }
 \arguments{
 \item{xset}{xcms object}

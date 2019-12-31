@@ -4,10 +4,21 @@
 \alias{what2}
 \title{metabolite/lipid identification}
 \usage{
-what2(xset, RT.DB = NULL, use.DB = "METABOLOMICS", mode = "+",
-  RT.cor = TRUE, RT.cor.method = "L", frag = T, ppm = 10,
-  rt = 25, ms2.rm = T, subgroup = NULL, scale_group = NULL,
-  scale_factor = 1)
+what2(
+  xset,
+  RT.DB = NULL,
+  use.DB = "METABOLOMICS",
+  mode = "+",
+  RT.cor = TRUE,
+  RT.cor.method = "L",
+  frag = T,
+  ppm = 10,
+  rt = 25,
+  ms2.rm = T,
+  subgroup = NULL,
+  scale_group = NULL,
+  scale_factor = 1
+)
 }
 \arguments{
 \item{xset}{xcms object}

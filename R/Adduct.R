@@ -38,10 +38,10 @@ adduct <- function(F, mode = c('+', '-')){
     }
     M_adduct <- c(M_adduct, mz(F,-1) + 36.965903)
     adduct_info <- data.frame(adduct = c('M', 'M-H+CH3OH','M-H+HCO2H','M-H+CH3CO2H', 'M-H+CF3CO2H',
-                                    'M+Cl(35)', 'M+Cl(37)'),
-                         mz = M_adduct,
+                                    'M+Cl(35)', 'M+Cl(37)', "M-H"),
+                         mz = c(M_adduct, (mz(F,-1)-mass("H1"))),
                          source = c('Radical', 'Methanol', 'Formic acid', 'Acetic acid', 'TFA',
-                                    'Chlorinated solvent', 'Chlorinated solvent')
+                                    'Chlorinated solvent', 'Chlorinated solvent', "Deprotonated")
                          )
     return(adduct_info)
   } else

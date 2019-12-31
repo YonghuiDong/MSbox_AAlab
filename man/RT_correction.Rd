@@ -4,8 +4,14 @@
 \alias{RT_correction}
 \title{Retention time calibration}
 \usage{
-RT_correction(xset, ppm = 10, rt = 50, anchors = NULL,
-  use.DB = "LIPIDOMICS", mode = "+")
+RT_correction(
+  xset,
+  ppm = 10,
+  rt = 50,
+  anchors = NULL,
+  use.DB = "LIPIDOMICS",
+  mode = "+"
+)
 }
 \arguments{
 \item{xset}{xcms object}
