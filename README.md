@@ -9,7 +9,7 @@ Common mass spectrometry tools for minimalist MS users.
 # Installation 
 
 ```r
-## stable version
+## minimal version
 install.packages('MSbox')
 ```
 
