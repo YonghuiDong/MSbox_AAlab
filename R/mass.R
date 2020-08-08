@@ -3,6 +3,7 @@
 #' @author Yonghui Dong
 #' @param F chemical formula, case insensitive
 #' @importFrom stats aggregate
+#' @importFrom crayon cyan bgMagenta
 #' @export
 #' @examples
 #'  mass('C7H6O4')
@@ -33,8 +34,17 @@ mass <- function(F) {
   ## convert the first letter of atom to upper case. case insensitive.
   atom <- toupper(atom)
   ## check the input
+  ###(1) check element
   atom_match <- match(atom, element.max$Class)
   if(any(is.na(atom_match))) {stop("Warning: certain element not found")}
+  ## special elements that we need to pay attention
+  ## for example, we want to know mass of C(carbon)O(oxygen), if your forget to write as C1O1,
+  ## it will be calculated for element Co (cobalt)
+  Exlist <- c("Co", "Cs", "Cu", "Ho", "In", "Ni", "Os", "Sn", "Si")
+  exmatch <- Exlist[which(toupper(Exlist) %in% atom)]
+  if(length(exmatch) > 0)
+  {cat(cyan("Attention: are following elements indeed in your formula: "), bgMagenta(exmatch), "\n")}
+  ###(2) check element number
   num <- as.numeric(v1[c(FALSE, TRUE)])
   if (length(atom) == length(num)) {
     atom_mass <- element.max$Mass[match(atom, element.max$Class)]
